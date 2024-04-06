@@ -13,29 +13,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
+
+enum AddressType {
+  INVOICE
+  DELIVERY
+}
+
+model Address {
+  id          Int     @id @default(autoincrement())
+  firstName   String?
+  lastName    String?
+  street      String?
+  houseNumber String?
+  zipCode     String?
+  city        String?
+  phoneNumber String?
+  countryId   Int
+  country     Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+  addressType AddressType
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  currentAddress Boolean
+}
+
+model ProductType {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  products Product[]
+}
+
 model User {
-  id           Int                   @id @default(autoincrement())
-  email        String                @unique
-  name         String?
-  password     String
-  orders       Order[]
+  id                   Int                   @id @default(autoincrement())
+  email                String                @unique
+  firstName            String?
+  lastName             String?
+  password             String
+  orders               Order[]
   shoppingCartProducts ShoppingCartProduct[]
-  countryId    Int
-  country      Country               @relation(fields: [countryId], references: [id])
+  addresses            Address[]
+}
+
+model Admin {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  userName String?
+  password String
 }
 
 model Country {
-  id    Int    @id @default(autoincrement())
-  name  String
-  code  String
-  users User[]
-}
+  id   Int    @id @default(autoincrement())
+  name String
+  code String
 
-model VatRate {
-  id   Int     @id @default(autoincrement())
-  rate Decimal @db.Decimal(12, 4)
-
-  products Product[]
+  addressess Address[]
 }
 
 enum OrderStatus {
@@ -47,50 +87,73 @@ enum OrderStatus {
 
 model Order {
   id         Int         @id @default(autoincrement())
-  status     OrderStatus
-  total      Float
+  status     OrderStatus @default(PENDING)
+
   userId     Int
-  user       User        @relation(fields: [userId], references: [id])
-  totalPrice Decimal     @db.Decimal(12, 4)
-  price      Decimal     @db.Decimal(12, 4)
-  vat        Decimal     @db.Decimal(12, 4)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  totalPrice Decimal     @default(0) @db.Decimal(12, 4)
+  totalQuantity Int?    @default(0)
+
+
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   orderlines Orderline[]
+  extraCosts ExtraCost[]
 }
 
 model Orderline {
   id         Int     @id @default(autoincrement())
   quantity   Int
   orderId    Int
-  order      Order   @relation(fields: [orderId], references: [id])
-  totalPrice Decimal @db.Decimal(12, 4)
-  price      Decimal @db.Decimal(12, 4)
-  vat        Decimal @db.Decimal(12, 4)
-  productId  Int
-  product    Product @relation(fields: [productId], references: [id])
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  price Decimal @db.Decimal(12, 4)
+  
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Product {
   id                   Int                   @id @default(autoincrement())
   name                 String
-  description          String
+  description          String?
   price                Decimal               @db.Decimal(12, 4)
   stock                Int                   @default(0)
   totalStock           Int                   @default(0)
   orderlines           Orderline[]
   shoppingCartProducts ShoppingCartProduct[]
-  vatRateId            Int
-  vatRate              VatRate               @relation(fields: [vatRateId], references: [id])
+
+  productTypeId Int
+  productType   ProductType @relation(fields: [productTypeId], references: [id], onDelete: Cascade)
+}
+
+model ExtraCostType {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  price       Decimal @db.Decimal(12, 4)
+
+  extraCosts ExtraCost[]
+}
+
+model ExtraCost {
+  id Int @id @default(autoincrement())
+
+  extraCostTypeId Int
+  extraCostType   ExtraCostType @relation(fields: [extraCostTypeId], references: [id], onDelete: Cascade)
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model ShoppingCartProduct {
   id     Int  @id @default(autoincrement())
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   quantity Int
 
