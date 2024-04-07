@@ -37,6 +37,8 @@ export class AuthController {
     @Request() req: ExpressRequest,
     @Body() loginDto: LoginDto,
   ): Promise<SuccessMessageDto> {
+    console.log('here');
+
     const user = await this.authService.loginUser(loginDto, req);
     return successMessage(`Welcome ${user.firstName} ${user?.lastName}`);
   }

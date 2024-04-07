@@ -43,6 +43,9 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<{ userId: number; email: string }> {
+    console.log('validate user called!');
+    console.log(email);
+    console.log(password);
     const user = await this.prisma.user.findFirst({
       where: { email },
     });
@@ -77,9 +80,14 @@ export class AuthService {
   }
 
   async loginUser(body: LoginDto, req: ExpressRequest): Promise<User> {
+    console.log('login user gel?');
     const user = await this.prisma.user.findFirst({
       where: { email: body.email },
     });
+
+    console.log('user found');
+
+    console.log(user);
 
     if (!user)
       throw new NotFoundException(

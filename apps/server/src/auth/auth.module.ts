@@ -7,9 +7,14 @@ import { AdminStrategy } from './admin.strategy';
 import { SessionSerializer } from './session.serializer';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { AuthController } from './auth.controller';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [PrismaModule, PassportModule.register({ session: true })],
+  imports: [
+    PrismaModule,
+    UserModule,
+    PassportModule.register({ session: true }),
+  ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, AdminStrategy, SessionSerializer],
 })
