@@ -1,4 +1,7 @@
-import { Dashboard as MainContent } from './components/main-content';
+import { MainContent } from './components/main-content';
+import { Suspense } from 'react';
+import { QueryParamProvider } from 'use-query-params';
+import NextAdapterApp from 'next-query-params/app';
 
 export default function RootLayout({
   children,
@@ -7,9 +10,11 @@ export default function RootLayout({
 }) {
   return (
     <MainContent>
-      <main className='container mt-8 rounded-md bg-neutral-50 py-8 text-black'>
-        {children}
-      </main>
+      <Suspense>
+        <QueryParamProvider adapter={NextAdapterApp}>
+          <main className='mx-4 w-full bg-neutral-50'>{children}</main>
+        </QueryParamProvider>
+      </Suspense>
     </MainContent>
   );
 }
