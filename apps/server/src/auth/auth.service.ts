@@ -3,12 +3,10 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common/exceptions';
-
 import bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { encodePassword, comparePasswords } from '../../utils/bcrypt';
 import { LoginDto } from './dto/login.dto';
-import { Request as ExpressRequest } from 'express';
 import { RegisterDto } from './dto/register.dto';
 import { User, Admin } from '@prisma/client';
 import { AddressType } from '@prisma/client';
@@ -43,9 +41,6 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<{ userId: number; email: string }> {
-    console.log('validate user called!');
-    console.log(email);
-    console.log(password);
     const user = await this.prisma.user.findFirst({
       where: { email },
     });
@@ -64,7 +59,7 @@ export class AuthService {
     }
   }
 
-  async loginAdmin(body: LoginDto, req: ExpressRequest): Promise<Admin> {
+  async loginAdmin(body: LoginDto): Promise<Admin> {
     const admin = await this.prisma.admin.findFirst({
       where: { email: body.email },
     });
@@ -79,15 +74,10 @@ export class AuthService {
     return admin;
   }
 
-  async loginUser(body: LoginDto, req: ExpressRequest): Promise<User> {
-    console.log('login user gel?');
+  async loginUser(body: LoginDto): Promise<User> {
     const user = await this.prisma.user.findFirst({
       where: { email: body.email },
     });
-
-    console.log('user found');
-
-    console.log(user);
 
     if (!user)
       throw new NotFoundException(
@@ -116,7 +106,7 @@ export class AuthService {
 
     const password: string = await encodePassword(body.password);
 
-    let address = {
+    const address = {
       firstName: body.firstName,
       lastName: body.lastName,
       street: body.street,

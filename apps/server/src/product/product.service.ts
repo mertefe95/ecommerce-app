@@ -2,17 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Product, ProductType } from '@prisma/client';
 import { Prisma } from '@prisma/client';
-
+import { ProductsQueryDto } from './dto/get-products-query.dto';
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async getProducts(): Promise<Product[]> {
-    return this.prisma.product.findMany({
+  async getProducts(query: ProductsQueryDto): Promise<Product[]> {
+    const { productTypes } = query ?? {};
+    const products = await this.prisma.product.findMany({
+      where: {
+        productType: {
+          id: {
+            in: productTypes,
+          },
+        },
+      },
       include: {
         productType: true,
       },
     });
+
+    return products;
   }
 
   async getProductTypes(): Promise<ProductType[]> {
@@ -24,7 +34,7 @@ export class ProductService {
   ): Promise<void> {
     await Promise.all(
       products?.map(async (item) => {
-        let { productId, quantity } = item ?? {};
+        const { productId, quantity } = item ?? {};
 
         const product = await this.prisma.product.findUnique({
           where: { id: productId },

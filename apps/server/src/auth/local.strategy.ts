@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from './auth.service';
@@ -13,6 +13,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     //change email to lower case
 
     email = email.toLowerCase();
+
     return await this.authService.validateUser(email, password);
   }
 }

@@ -26,7 +26,7 @@ import {
   FormControl,
   FormMessage,
 } from '@repo/ui/components/form';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z
@@ -42,6 +42,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function Login() {
+  const router = useRouter();
+
   const { currentUser, getCurrentUser } = useContext(UserContext);
 
   const form = useForm<FormValues>({
@@ -59,6 +61,7 @@ export default function Login() {
     },
 
     onSuccess: (response: { data: LoginResponse }) => {
+      router.push('/');
       toast({
         title: 'You submitted the following values:',
       });

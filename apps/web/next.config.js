@@ -2,6 +2,14 @@
 module.exports = {
   reactStrictMode: false,
   transpilePackages: ['@repo/ui'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+      },
+    ],
+  },
   async rewrites() {
     return [
       {

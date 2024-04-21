@@ -1,29 +1,39 @@
 'use client';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@repo/ui/components/accordion';
+
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
 import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '@web/common/api';
 import { ProductFilter } from './product-filter';
+import {
+  useQueryParams,
+  StringParam,
+  NumberParam,
+  ArrayParam,
+  withDefault,
+  NumericArrayParam,
+} from 'use-query-params';
+
+const MyFiltersParam = withDefault(NumericArrayParam, []);
 
 const ProductFilters = () => {
+  const [query, setQuery] = useQueryParams({
+    productTypes: MyFiltersParam,
+  });
+
+  const { productTypes: selected } = query;
+
   const {
     isLoading,
     error,
     data: productTypes,
     refetch,
   } = useQuery({
-    queryKey: ['product-types'],
+    queryKey: ['productTypes'],
     queryFn: async () => {
       const data = await axiosInstance.get('product/types');
       return data.data;
@@ -40,7 +50,7 @@ const ProductFilters = () => {
     },
   ];
   return (
-    <Card x-chunk='dashboard-01-chunk-5'>
+    <Card className='col-span-3' x-chunk='dashboard-01-chunk-5'>
       <CardHeader>
         <CardTitle>Filters</CardTitle>
       </CardHeader>
@@ -49,6 +59,8 @@ const ProductFilters = () => {
           key={'product-type'}
           name='Product Type'
           options={productTypes}
+          selected={selected}
+          setSelect={setQuery}
         />
       </CardContent>
     </Card>
