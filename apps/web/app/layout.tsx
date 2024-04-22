@@ -20,14 +20,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <QueryProvider>
-          <UserProvider>
-            {' '}
-            <QueryParamProvider adapter={NextAdapterApp}>
-              {children}
-            </QueryParamProvider>
-          </UserProvider>
-        </QueryProvider>
+        <QueryParamProvider adapter={NextAdapterApp}>
+          <QueryProvider>
+            <UserProvider> {children}</UserProvider>
+          </QueryProvider>
+        </QueryParamProvider>
         <Toaster />
       </body>
     </html>

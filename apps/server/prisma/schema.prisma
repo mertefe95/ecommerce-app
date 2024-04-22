@@ -86,15 +86,14 @@ enum OrderStatus {
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  status     OrderStatus @default(PENDING)
+  id     Int         @id @default(autoincrement())
+  status OrderStatus @default(PENDING)
 
-  userId     Int
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  totalPrice Decimal     @default(0) @db.Decimal(12, 4)
+  totalPrice    Decimal @default(0) @db.Decimal(12, 4)
   totalQuantity Int?    @default(0)
-
 
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -103,12 +102,11 @@ model Order {
 }
 
 model Orderline {
-  id         Int     @id @default(autoincrement())
-  quantity   Int
-  orderId    Int
-  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  price Decimal @db.Decimal(12, 4)
-  
+  id       Int     @id @default(autoincrement())
+  quantity Int
+  orderId  Int
+  order    Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  price    Decimal @db.Decimal(12, 4)
 
   productId Int
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -126,6 +124,12 @@ model Product {
 
   productTypeId Int
   productType   ProductType @relation(fields: [productTypeId], references: [id], onDelete: Cascade)
+
+  brandId Int?
+  brand   Brand? @relation(fields: [brandId], references: [id], onDelete: Cascade)
+
+  productSellers ProductSeller[]
+  productColors ProductColor[]
 }
 
 model ExtraCostType {
@@ -158,4 +162,48 @@ model ShoppingCartProduct {
   quantity Int
 
   @@unique([userId, productId])
+}
+
+model Brand {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  products Product[]
+}
+
+model Seller {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  productSellers ProductSeller[]
+}
+
+model ProductSeller {
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sellerId Int
+  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@id([sellerId, productId])
+}
+
+model Color {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  code String
+
+  productColors ProductColor[]
+
+}
+
+model ProductColor {
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  colorId Int
+  color   Color @relation(fields: [colorId], references: [id], onDelete: Cascade)
+
+  @@id([productId, colorId])
 }

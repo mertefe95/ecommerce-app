@@ -32,31 +32,43 @@ import Product from './product';
 import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '@web/common/api';
 import ProductFilters from './product-filters';
-
+import { ProductFilter } from './product-filter';
 import {
-  useQueryParam,
+  useQueryParams,
+  StringParam,
+  NumberParam,
+  ArrayParam,
   withDefault,
   NumericArrayParam,
 } from 'use-query-params';
+import { Skeleton } from '@repo/ui/components/skeleton';
+
+const MyFiltersParam = withDefault(NumericArrayParam, []);
 
 const Products = () => {
-  //const [filter,setFilter] = useQuery('')
-
-  const searchParams = useSearchParams();
-
-  //const productTypes = searchParams.getAll('productTypes');
-
-  const [productTypes] = useQueryParam(
+  /*const [productTypes] = useQueryParam(
     'productTypes',
     withDefault(NumericArrayParam, [])
-  );
+  );*/
+
+  const [query, setQuery] = useQueryParams({
+    productTypes: MyFiltersParam,
+  });
+
+  const { productTypes: selected } = query;
+
+  const { data: productTypes } = useQuery({
+    queryKey: ['productTypes'],
+    queryFn: async () => {
+      const data = await axiosInstance.get('product/types');
+      return data.data;
+    },
+  });
 
   const { isLoading, error, data, refetch } = useQuery({
-    queryKey: ['productTypes', productTypes],
+    queryKey: ['productTypes', selected],
     queryFn: async () => {
-      const data = await axiosInstance.get(
-        `product?productTypes=${productTypes}`
-      );
+      const data = await axiosInstance.get(`product?productTypes=${selected}`);
       return data.data;
     },
     /*refetchOnWindowFocus: false,
@@ -117,7 +129,21 @@ const Products = () => {
       </div>
 
       <div className='grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-12'>
-        <ProductFilters />
+        {/*  <ProductFilters />*/}
+        <Card className='col-span-3' x-chunk='dashboard-01-chunk-5'>
+          <CardHeader>
+            <CardTitle>Filters</CardTitle>
+          </CardHeader>
+          <CardContent className='grid gap-8'>
+            <ProductFilter
+              key={'product-type'}
+              name='Product Type'
+              options={productTypes}
+              selected={selected}
+              setSelect={setQuery}
+            />
+          </CardContent>
+        </Card>
         <Card className='col-span-9'>
           <CardHeader className='flex flex-row items-center'>
             <div className='grid gap-2'>
@@ -134,7 +160,15 @@ const Products = () => {
           <CardContent>
             <div className='flex max-w-full flex-wrap gap-x-12  pb-4'>
               {data?.map((product) => {
-                return (
+                return isLoading ? (
+                  <div className='flex flex-col space-y-3'>
+                    <Skeleton className='h-[125px] w-[250px] rounded-xl' />
+                    <div className='space-y-2'>
+                      <Skeleton className='h-4 w-[250px]' />
+                      <Skeleton className='h-4 w-[200px]' />
+                    </div>
+                  </div>
+                ) : (
                   <Product
                     key={product.name}
                     product={product}

@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import {
-  BadRequestException,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common/exceptions';
+import { NotFoundException } from '@nestjs/common/exceptions';
 import { User } from '@prisma/client';
 
 @Injectable()

@@ -14,6 +14,8 @@ import {
 } from '@repo/ui/components/context-menu';
 import { formatPrice } from '@web/util/format-price';
 
+import { Skeleton } from '@repo/ui/components/skeleton';
+
 interface ProductProps extends React.HTMLAttributes<HTMLDivElement> {
   product: any;
   aspectRatio?: 'portrait' | 'square';

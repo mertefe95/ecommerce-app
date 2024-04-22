@@ -29,6 +29,8 @@ export class ProductService {
     return this.prisma.productType.findMany();
   }
 
+  async getProductFilters(): Promise<any> {}
+
   async validateProductStock(
     products: { productId: number; quantity: number }[],
   ): Promise<void> {
@@ -57,9 +59,9 @@ export class ProductService {
   ): Promise<void> {
     await Promise.all(
       products?.map(async (item) => {
-        let { productId, quantity } = item ?? {};
+        const { productId, quantity } = item ?? {};
 
-        const product = await tx.product.update({
+        await tx.product.update({
           where: { id: productId },
           data: {
             stock: {
