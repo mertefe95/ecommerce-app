@@ -72,4 +72,17 @@ export class ProductService {
       }),
     );
   }
+
+  async getProduct(productId: number): Promise<Product> {
+    return await this.prisma.product.findUnique({
+      where: { id: productId },
+      include: {
+        productType: true,
+        brand: true,
+        productSellers: true,
+        productColors: true,
+        productSizes: true,
+      },
+    });
+  }
 }

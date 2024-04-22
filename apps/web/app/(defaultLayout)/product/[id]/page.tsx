@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Product from './components/product';
+import Product from '../components/product';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -8,6 +8,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Page() {
-  return <Product />;
+export default function Page({ params }: { params: { id: number } }) {
+  return <Product id={params.id} />;
 }

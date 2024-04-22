@@ -116,6 +116,7 @@ model Product {
   id                   Int                   @id @default(autoincrement())
   name                 String
   description          String?
+  maxQuantity          Int                   @default(0)
   price                Decimal               @db.Decimal(12, 4)
   stock                Int                   @default(0)
   totalStock           Int                   @default(0)
@@ -130,6 +131,7 @@ model Product {
 
   productSellers ProductSeller[]
   productColors ProductColor[]
+  productSizes  ProductSize[]
 }
 
 model ExtraCostType {
@@ -206,4 +208,22 @@ model ProductColor {
   color   Color @relation(fields: [colorId], references: [id], onDelete: Cascade)
 
   @@id([productId, colorId])
+}
+
+
+model Size {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  productSizes ProductSize[]
+}
+
+model ProductSize {
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sizeId Int
+  size   Size @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+
+  @@id([productId, sizeId])
 }

@@ -13,12 +13,6 @@ import {
   Users,
 } from 'lucide-react';
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@repo/ui/components/avatar';
-import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import {
   Card,
@@ -27,17 +21,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { useSearchParams } from 'next/navigation';
 import Product from './product';
 import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '@web/common/api';
-import ProductFilters from './product-filters';
 import { ProductFilter } from './product-filter';
 import {
   useQueryParams,
-  StringParam,
-  NumberParam,
-  ArrayParam,
   withDefault,
   NumericArrayParam,
 } from 'use-query-params';
@@ -169,14 +158,16 @@ const Products = () => {
                     </div>
                   </div>
                 ) : (
-                  <Product
-                    key={product.name}
-                    product={product}
-                    className='w-[200px]'
-                    aspectRatio='portrait'
-                    width={250}
-                    height={330}
-                  />
+                  <Link href={`/product/${product?.id}`}>
+                    <Product
+                      key={product.name}
+                      product={product}
+                      className='w-[200px]'
+                      aspectRatio='portrait'
+                      width={250}
+                      height={330}
+                    />
+                  </Link>
                 );
               })}{' '}
             </div>

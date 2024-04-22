@@ -6,6 +6,7 @@ module.exports = [
     totalStock: 800,
     stock: 800,
     productTypeId: 1,
+    maxQuantity: 5,
   },
   {
     name: 'Composition notebook',
@@ -14,6 +15,7 @@ module.exports = [
     totalStock: 600,
     stock: 600,
     productTypeId: 1,
+    maxQuantity: 10,
   },
   {
     name: 'Hardcover journal',
@@ -22,6 +24,7 @@ module.exports = [
     totalStock: 900,
     stock: 900,
     productTypeId: 1,
+    maxQuantity: 5,
   },
   {
     name: 'Refillable leather notebook',
@@ -30,6 +33,7 @@ module.exports = [
     totalStock: 1000,
     stock: 1000,
     productTypeId: 1,
+    maxQuantity: 4,
   },
   {
     name: 'Grid paper notebook',
@@ -38,6 +42,7 @@ module.exports = [
     totalStock: 700,
     stock: 700,
     productTypeId: 1,
+    maxQuantity: 3,
   },
   {
     name: 'Dotted bullet journal',
@@ -54,6 +59,7 @@ module.exports = [
     totalStock: 950,
     stock: 950,
     productTypeId: 1,
+    maxQuantity: 2,
   },
   {
     name: "Traveler's notebook",

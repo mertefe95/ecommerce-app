@@ -1,5 +1,3 @@
-const { AdminRole } = require('@prisma/client');
-
 module.exports = [
   {
     userName: 'Mert',
