@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import Product from './product';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { axiosInstance } from '@web/common/api';
 import { ProductFilter } from './product-filter';
 import {
@@ -57,66 +57,23 @@ const Products = () => {
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ['productTypes', selected],
     queryFn: async () => {
-      const data = await axiosInstance.get(`product?productTypes=${selected}`);
+      console.log('selected');
+      console.log(selected);
+
+      const data = await axiosInstance.get(`product`, {
+        params: {
+          productTypes: selected,
+        },
+      });
       return data.data;
     },
+    placeholderData: keepPreviousData,
     /*refetchOnWindowFocus: false,
         retry: 1,*/
   });
 
   return (
     <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8'>
-      <div className='grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4'>
-        <Card x-chunk='dashboard-01-chunk-0'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Total Revenue</CardTitle>
-            <DollarSign className='h-4 w-4 text-muted-foreground' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>$45,231.89</div>
-            <p className='text-xs text-muted-foreground'>
-              +20.1% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card x-chunk='dashboard-01-chunk-1'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Subscriptions</CardTitle>
-            <Users className='h-4 w-4 text-muted-foreground' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>+2350</div>
-            <p className='text-xs text-muted-foreground'>
-              +180.1% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card x-chunk='dashboard-01-chunk-2'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Sales</CardTitle>
-            <CreditCard className='h-4 w-4 text-muted-foreground' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>+12,234</div>
-            <p className='text-xs text-muted-foreground'>
-              +19% from last month
-            </p>
-          </CardContent>
-        </Card>
-        <Card x-chunk='dashboard-01-chunk-3'>
-          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>Active Now</CardTitle>
-            <Activity className='h-4 w-4 text-muted-foreground' />
-          </CardHeader>
-          <CardContent>
-            <div className='text-2xl font-bold'>+573</div>
-            <p className='text-xs text-muted-foreground'>
-              +201 since last hour
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
       <div className='grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-12'>
         {/*  <ProductFilters />*/}
         <Card className='col-span-3' x-chunk='dashboard-01-chunk-5'>
@@ -147,7 +104,7 @@ const Products = () => {
             </Button>
           </CardHeader>
           <CardContent>
-            <div className='flex max-w-full flex-wrap gap-x-12  pb-4'>
+            <div className='flex flex-wrap gap-x-12  pb-4'>
               {data?.map((product) => {
                 return isLoading ? (
                   <div className='flex flex-col space-y-3'>
@@ -158,7 +115,7 @@ const Products = () => {
                     </div>
                   </div>
                 ) : (
-                  <Link href={`/product/${product?.id}`}>
+                  <Link href={`/product/${product?.id}`} key={product?.id}>
                     <Product
                       key={product.name}
                       product={product}

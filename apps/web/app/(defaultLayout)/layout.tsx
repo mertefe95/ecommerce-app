@@ -13,9 +13,7 @@ export default function DefaultLayout({
   return (
     <MainContent>
       <Suspense>
-        <QueryParamProvider adapter={NextAdapterApp}>
-          <main className='mx-4 w-full bg-neutral-50'>{children}</main>
-        </QueryParamProvider>
+        <main className='mx-4 w-full bg-neutral-50'>{children}</main>
       </Suspense>
     </MainContent>
   );
