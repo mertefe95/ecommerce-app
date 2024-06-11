@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
-import Products from './components/products';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Products',
-    description: `Products`,
+    title: 'Dashboard',
+    description: `Dashboard`,
   };
 }
 
 export default function Page() {
-  return <Products />;
+  return <></>;
 }
