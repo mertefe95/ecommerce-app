@@ -18,10 +18,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/interface/Role';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
-import {
-  Request as ExpressRequest,
-  Response as ExpressResponse,
-} from 'express';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -31,6 +28,13 @@ export class UserController {
   @Roles([Role.USER])
   @Get('/me')
   async getMyInfo(@Request() req: ExpressRequest): Promise<User> {
-    return await this.userService.getUserById(req.user.userId);
+    return await this.userService.getUserById(req.user?.userId);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Roles([Role.ADMIN])
+  @Get('/all')
+  async getAllUsers(): Promise<Partial<User>[]> {
+    return await this.userService.getAllUsers();
   }
 }

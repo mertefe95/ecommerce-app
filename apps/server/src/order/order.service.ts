@@ -37,8 +37,6 @@ export class OrderService {
       throw new BadRequestException(e?.message);
     }
 
-    const prisma = new PrismaClient();
-
     try {
       //await tx.product.update({where})
       await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {

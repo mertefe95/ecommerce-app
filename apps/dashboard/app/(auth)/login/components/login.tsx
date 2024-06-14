@@ -27,6 +27,7 @@ import {
   FormMessage,
 } from '@repo/ui/components/form';
 import { useRouter } from 'next/navigation';
+import { RoutePath } from '@dashboard/constants';
 
 const formSchema = z.object({
   email: z
@@ -57,7 +58,7 @@ export default function Login() {
 
   const login = useMutation({
     mutationFn: (data: LoginRequest) => {
-      return axiosInstance.post('auth/login', data);
+      return axiosInstance.post(RoutePath.AUTH + '/login/admin', data);
     },
 
     onSuccess: (response: { data: LoginResponse }) => {

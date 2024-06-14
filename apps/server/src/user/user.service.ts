@@ -16,4 +16,18 @@ export class UserService {
 
     return user;
   }
+
+  async getAllUsers(): Promise<Partial<User>[]> {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+    console.log('users');
+    console.log(users);
+    return users;
+  }
 }

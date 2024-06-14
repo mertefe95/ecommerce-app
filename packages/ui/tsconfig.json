@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react-jsx",
     "target": "es5", // Specify ECMAScript target version
     "lib": ["dom", "dom.iterable", "esnext"], // List of library files to be included in the compilation
     "allowJs": true, // Allow JavaScript files to be compiled
@@ -13,7 +14,7 @@
     "isolatedModules": true, // Unconditionally emit imports for unresolved files
     "resolveJsonModule": true, // Include modules imported with .json extension
     "noEmit": true, // Do not emit output (meaning do not compile code, only perform type checking)
-    "jsx": "react", // Support JSX in .tsx files
+
     "sourceMap": true, // Generate corrresponding .map file
     "declaration": true, // Generate corresponding .d.ts file
     "noUnusedLocals": true, // Report errors on unused locals

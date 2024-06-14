@@ -33,6 +33,8 @@ export class AuthenticatedGuard implements CanActivate {
         where: { id: adminId ?? 0 },
       });
 
+      console.log(`admin: ${admin}`);
+
       if (admin) return request.isAuthenticated();
     }
 

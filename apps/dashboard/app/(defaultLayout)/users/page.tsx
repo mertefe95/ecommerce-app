@@ -1,16 +1,18 @@
 import { Metadata } from 'next';
 
+import Users from './components';
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Dashboard',
-    description: `Dashboard`,
+    title: 'Users',
+    description: `Users`,
   };
 }
 
 export default function Page() {
   return (
     <>
-      <div className='mt-20'></div>
+      <Users />
     </>
   );
 }

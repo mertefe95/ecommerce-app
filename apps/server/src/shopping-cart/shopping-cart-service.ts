@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ShoppingCartProduct } from '@prisma/client';
 import { AddToShoppingCartDto } from './dto/add-to-shopping-cart-dto';
-import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common/exceptions';
+import {} from '@nestjs/common/exceptions';
 import { ShoppingCartWithSummary } from './dto/shopping-cart-with-summary.dto';
 
 @Injectable()
