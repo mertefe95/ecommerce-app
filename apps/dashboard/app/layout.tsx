@@ -21,7 +21,10 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
         <QueryProvider>
-          <QueryParamProvider adapter={NextAdapterApp}>
+          <QueryParamProvider
+            adapter={NextAdapterApp}
+            options={{ enableBatching: true }}
+          >
             <UserProvider> {children}</UserProvider>
           </QueryParamProvider>{' '}
         </QueryProvider>

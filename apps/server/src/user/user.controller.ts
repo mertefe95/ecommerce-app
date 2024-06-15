@@ -1,24 +1,12 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Put,
-  Post,
-  UseGuards,
-  ParseIntPipe,
-  Request,
-  Patch,
-  BadRequestException,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Query } from '@nestjs/common';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/interface/Role';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
+import { GetAllUsersQueryDto } from './dto/get-all-users-query.dto';
+import { SuccessList } from 'utils/dto';
 
 @Controller('user')
 export class UserController {
@@ -34,7 +22,9 @@ export class UserController {
   @UseGuards(AuthenticatedGuard)
   @Roles([Role.ADMIN])
   @Get('/all')
-  async getAllUsers(): Promise<Partial<User>[]> {
-    return await this.userService.getAllUsers();
+  async getAllUsers(
+    @Query() query: GetAllUsersQueryDto,
+  ): Promise<SuccessList<Partial<User>>> {
+    return await this.userService.getAllUsers(query);
   }
 }

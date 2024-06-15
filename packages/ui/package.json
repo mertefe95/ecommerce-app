@@ -9,6 +9,7 @@
     "./postcss.config": "./postcss.config.js",
     "./tailwind.config": "./tailwind.config.ts",
     "./components/*": "./src/components/*.tsx",
+    "./types": "./src/types.ts",
     "./hooks/*": "./src/hooks/*.ts",
     "./utility/*": "./src/utility/*.ts"
   },

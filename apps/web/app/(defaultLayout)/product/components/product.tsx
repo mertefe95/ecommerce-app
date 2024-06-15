@@ -45,8 +45,7 @@ const Product = ({ id }: { id: number }) => {
     /*refetchOnWindowFocus: false,
             retry: 1,*/
   });
-  console.log('product');
-  console.log(product);
+
   return (
     <div>
       <Card className='overflow-hidden'>

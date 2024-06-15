@@ -12,4 +12,5 @@ export enum RoutePath {
 
 export enum QueryKey {
   USERS = 'users',
+  SEARCH = 'search',
 }

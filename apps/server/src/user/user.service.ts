@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { User } from '@prisma/client';
+import { GetAllUsersQueryDto } from './dto/get-all-users-query.dto';
+import Search from 'utils/custom/search';
+import OrderBy from 'utils/custom/order-by';
+import Pagination from 'utils/custom/pagination';
+import { SuccessList } from 'utils/dto';
 
 @Injectable()
 export class UserService {
@@ -17,17 +22,42 @@ export class UserService {
     return user;
   }
 
-  async getAllUsers(): Promise<Partial<User>[]> {
+  async getAllUsers(
+    query: GetAllUsersQueryDto,
+  ): Promise<SuccessList<Partial<User>>> {
+    const search = Search(query, [{ field: 'email' }]);
+
+    const { pagination } = Pagination(query);
+
+    const { orderBy } = OrderBy(query, [
+      { key: 'email', fields: ['email'] },
+      { key: 'firstName', fields: ['firstName'] },
+      { key: 'lastName', fields: ['lastName'] },
+    ]);
+
     const users = await this.prisma.user.findMany({
+      where: {
+        ...search,
+      },
+      orderBy,
       select: {
         id: true,
         email: true,
         firstName: true,
         lastName: true,
       },
+      ...(pagination && { ...pagination }),
     });
-    console.log('users');
-    console.log(users);
-    return users;
+
+    const totalRows = await this.prisma.user.count({
+      where: {
+        ...search,
+      },
+    });
+
+    return {
+      data: users,
+      totalRows,
+    };
   }
 }
