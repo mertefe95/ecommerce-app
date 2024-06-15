@@ -1,3 +1,18 @@
+const { faker } = require('@faker-js/faker');
+
+function createRandomUser() {
+  return {
+    firstName: faker.internet.userName(),
+    lastName: faker.internet.userName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  };
+}
+
+const USERS = faker.helpers.multiple(createRandomUser, {
+  count: 999,
+});
+
 module.exports = [
   {
     firstName: 'Mert',
@@ -7,8 +22,9 @@ module.exports = [
   },
   {
     firstName: 'Efe',
-    lastName: 'MERT',
+    lastName: 'Mert',
     email: process.env.ADMIN_EMAIL_2,
     password: process.env.DEFAULT_PASSWORD,
   },
+  ...USERS,
 ];

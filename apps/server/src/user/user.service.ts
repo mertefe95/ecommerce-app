@@ -35,6 +35,9 @@ export class UserService {
       { key: 'lastName', fields: ['lastName'] },
     ]);
 
+    console.log('query');
+    console.log(query);
+
     const users = await this.prisma.user.findMany({
       where: {
         ...search,

@@ -62,7 +62,7 @@ export function useDataTableState(): DataTableStateProps {
 
   const [paginationPerPage, setPaginationPerPage] = useQueryParam(
     'paginationPerPage',
-    withDefault(NumberParam, 10)
+    withDefault(NumberParam, 20)
   );
 
   return {
