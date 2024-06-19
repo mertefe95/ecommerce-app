@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Users from '../(defaultLayout)/users/components/inifinite-scroll-test';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -10,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Page() {
   return (
     <>
-      <div className='mt-20'></div>
+      <Users />
     </>
   );
 }
