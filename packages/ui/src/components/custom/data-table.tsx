@@ -28,6 +28,26 @@ import { DataTableType } from '../../types';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import clsx from 'clsx';
+import {
+  useQuery,
+  keepPreviousData,
+  UseQueryResult,
+  useInfiniteQuery,
+  UseInfiniteQueryResult,
+} from '@tanstack/react-query';
+import { DataTableFilter } from './data-table-filters';
+import {
+  ArrowDownIcon,
+  ArrowRightIcon,
+  ArrowUpIcon,
+  CheckCircledIcon,
+  CircleIcon,
+  CrossCircledIcon,
+  QuestionMarkCircledIcon,
+  StopwatchIcon,
+  Cross2Icon,
+} from '@radix-ui/react-icons';
+import { Button } from '../button';
 
 declare type NewValueType<D> = D | ((latestValue: D) => D);
 
@@ -42,6 +62,9 @@ interface DataTableProps<TData, TValue> {
   type: DataTableType;
   fetchNextPage?: () => void;
   isFetching?: boolean;
+  searchText?: string;
+  filterOptions?: any;
+  //queryResult: UseInfiniteQueryResult | UseQueryResult;
 }
 
 export function DataTable<TData, TValue>({
@@ -52,6 +75,8 @@ export function DataTable<TData, TValue>({
   type,
   fetchNextPage,
   isFetching,
+  searchText = 'Search...',
+  filterOptions,
 }: DataTableProps<TData, TValue>) {
   const { rows } = table.getRowModel();
 
@@ -66,18 +91,92 @@ export function DataTable<TData, TValue>({
     }
   }, [inView]);
 
+  const isFiltered = table.getState().columnFilters.length > 0;
+
+  const statuses = [
+    {
+      value: 'backlog',
+      label: 'Backlog',
+      icon: QuestionMarkCircledIcon,
+    },
+    {
+      value: 'todo',
+      label: 'Todo',
+      icon: CircleIcon,
+    },
+    {
+      value: 'in progress',
+      label: 'In Progress',
+      icon: StopwatchIcon,
+    },
+    {
+      value: 'done',
+      label: 'Done',
+      icon: CheckCircledIcon,
+    },
+    {
+      value: 'canceled',
+      label: 'Canceled',
+      icon: CrossCircledIcon,
+    },
+  ];
+
+  const priorities = [
+    {
+      label: 'Low',
+      value: 'low',
+      icon: ArrowDownIcon,
+    },
+    {
+      label: 'Medium',
+      value: 'medium',
+      icon: ArrowRightIcon,
+    },
+    {
+      label: 'High',
+      value: 'high',
+      icon: ArrowUpIcon,
+    },
+  ];
+
   return (
-    <div>
-      <div className='flex items-center py-4'>
+    <div className='grid gap-y-4'>
+      <div className='flex items-center'>
         <Input
-          placeholder='Filter emails...'
+          placeholder={searchText}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           className='max-w-sm'
         />
-      </div>{' '}
+      </div>
+      <div className='flex'>
+        {table.getColumn('status') && (
+          <DataTableFilter
+            column={table.getColumn('status')}
+            title='Status'
+            options={statuses}
+          />
+        )}
+        {table.getColumn('priority') && (
+          <DataTableFilter
+            column={table.getColumn('priority')}
+            title='Priority'
+            options={priorities}
+          />
+        )}
+        {isFiltered && (
+          <Button
+            variant='ghost'
+            onClick={() => table.resetColumnFilters()}
+            className='h-8 px-2 lg:px-3'
+          >
+            Reset
+            <Cross2Icon className='ml-2 h-4 w-4' />
+          </Button>
+        )}
+      </div>
       <div
-        className={clsx('rounded-md border', {
+        className={clsx('w-full rounded-md border', {
           'relative h-[600px] w-full overflow-auto':
             type === DataTableType.INFINITE_SCROLL,
         })}
@@ -139,7 +238,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>{' '}
-      {type !== DataTableType.PAGINATION ? (
+      {type === DataTableType.PAGINATION ? (
         <div className='mt-4'>
           <DataTablePagination table={table} />
         </div>

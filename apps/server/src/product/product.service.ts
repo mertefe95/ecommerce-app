@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Product, ProductType } from '@prisma/client';
+import { Brand, Product, ProductType } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 import { ProductsQueryDto } from './dto/get-products-query.dto';
+import Search from 'utils/custom/search';
+import OrderBy from 'utils/custom/order-by';
+import Pagination from 'utils/custom/pagination';
+import { SuccessList } from 'utils/dto';
+import { GetAllProductsQueryDto } from './dto/get-all-products-query.dto';
+
 @Injectable()
 export class ProductService {
   constructor(private prisma: PrismaService) {}
@@ -23,10 +29,6 @@ export class ProductService {
     });
 
     return products;
-  }
-
-  async getProductTypes(): Promise<ProductType[]> {
-    return this.prisma.productType.findMany();
   }
 
   async getProductFilters(): Promise<any> {}
@@ -84,5 +86,57 @@ export class ProductService {
         productSizes: true,
       },
     });
+  }
+
+  async getAllProducts(
+    query: GetAllProductsQueryDto,
+  ): Promise<SuccessList<Product>> {
+    const search = Search(query, [
+      { field: 'name' },
+      { relations: ['productType'], field: 'name' },
+      { relations: ['brand'], field: 'name' },
+    ]);
+
+    const { pagination } = Pagination(query);
+
+    const { orderBy } = OrderBy(query, [
+      { key: 'name', fields: ['name'] },
+      { key: 'productType', relations: ['productType'], fields: ['name'] },
+      { key: 'brand', relations: ['brand'], fields: ['name'] },
+    ]);
+
+    const products = await this.prisma.product.findMany({
+      where: {
+        ...search,
+      },
+      include: {
+        productType: true,
+        brand: true,
+        productSellers: true,
+        productColors: true,
+        productSizes: true,
+      },
+      orderBy,
+      ...(pagination && { ...pagination }),
+    });
+
+    const totalRows = await this.prisma.product.count({
+      where: {
+        ...search,
+      },
+    });
+
+    return {
+      data: products,
+      totalRows,
+    };
+  }
+
+  async getBrands(): Promise<Brand[]> {
+    return this.prisma.brand.findMany();
+  }
+
+  async getProductTypes(): Promise<ProductType[]> {
+    return this.prisma.productType.findMany();
   }
 }

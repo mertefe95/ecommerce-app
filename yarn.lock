@@ -6418,6 +6418,11 @@ minizlib@^2.1.1:
     minipass "^3.0.0"
     yallist "^4.0.0"
 
+mitt@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.1.tgz#ea36cf0cc30403601ae074c8f77b7092cdab36d1"
+  integrity sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==
+
 mkdirp@^0.5.4:
   version "0.5.6"
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.6.tgz"
@@ -6516,6 +6521,13 @@ next-themes@^0.3.0:
   resolved "https://registry.yarnpkg.com/next-themes/-/next-themes-0.3.0.tgz#b4d2a866137a67d42564b07f3a3e720e2ff3871a"
   integrity sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==
 
+next-usequerystate@^1.17.4:
+  version "1.17.4"
+  resolved "https://registry.yarnpkg.com/next-usequerystate/-/next-usequerystate-1.17.4.tgz#3bf89b67a349b55823bba5eb09b86cce3b9186e8"
+  integrity sha512-d+X6k9tppgVGm+ZWlEqIBnQbXHQ3tNo5ZkQw6ouxtftVpCOiKXMpozcR4UZU9Ck64W2Mhb8wqWIlzrxqjvE3ww==
+  dependencies:
+    mitt "^3.0.1"
+
 next@^14.0.4:
   version "14.1.4"
   resolved "https://registry.yarnpkg.com/next/-/next-14.1.4.tgz#203310f7310578563fd5c961f0db4729ce7a502d"
@@ -6606,6 +6618,13 @@ npmlog@^5.0.1:
     console-control-strings "^1.1.0"
     gauge "^3.0.0"
     set-blocking "^2.0.0"
+
+nuqs@^1.17.4:
+  version "1.17.4"
+  resolved "https://registry.yarnpkg.com/nuqs/-/nuqs-1.17.4.tgz#c82fcf62da38939c1c47aeb9efc8f4521b11ad0f"
+  integrity sha512-wraphFfKI+Y/aWIGFsld/Ta7fTFEyeya1LkgEGNPDiMuY+Hwea/eVHBiq1GYlyMqTYSAoxRWvQyjCIo1Dy1u7g==
+  dependencies:
+    mitt "^3.0.1"
 
 object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"

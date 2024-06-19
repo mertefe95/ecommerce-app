@@ -3,11 +3,16 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import { Button } from '@repo/ui/components/button';
-import { User } from '@prisma/client';
+import { Product, ProductType, Brand } from '@prisma/client';
 import { Checkbox } from '@repo/ui/components/checkbox';
 import { DataTableColumnHeader } from '@repo/ui/components/custom/data-table-column-header';
 
-export const getColumns = (): ColumnDef<User>[] => {
+export const getColumns = (): ColumnDef<
+  Product & {
+    productType: ProductType;
+    brand: Brand;
+  }
+>[] => {
   return [
     {
       id: 'select',
@@ -29,33 +34,27 @@ export const getColumns = (): ColumnDef<User>[] => {
         />
       ),
       enableSorting: false,
-      enableHiding: false,
     },
     {
-      accessorKey: 'firstName',
+      accessorKey: 'name',
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title={'First name'} />;
+        return <DataTableColumnHeader column={column} title={'Name'} />;
       },
       enableSorting: true,
     },
     {
-      accessorKey: 'lastName',
+      accessorKey: 'productType',
+      accessorFn: (row) => row.productType?.name,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title={'Last name'} />;
+        return <DataTableColumnHeader column={column} title={'Type'} />;
       },
       enableSorting: true,
     },
     {
-      accessorKey: 'email',
+      accessorKey: 'brand',
+      accessorFn: (row) => row.brand?.name,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title={'Email'} />;
-      },
-      enableSorting: true,
-    },
-    {
-      accessorKey: 'priority',
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title={'Last name'} />;
+        return <DataTableColumnHeader column={column} title={'Brand'} />;
       },
       enableSorting: true,
     },

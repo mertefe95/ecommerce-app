@@ -3,9 +3,12 @@ import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/interface/Role';
 import { ProductService } from './product.service';
-import { Product, ProductType } from '@prisma/client';
+import { Product, ProductType, Brand } from '@prisma/client';
 import { ProductsQueryDto } from './dto/get-products-query.dto';
 import { ParseIntPipe } from '@nestjs/common';
+import { GetAllProductsQueryDto } from './dto/get-all-products-query.dto';
+import { SuccessList } from 'utils/dto';
+
 @Controller('product')
 export class ProductController {
   constructor(private productService: ProductService) {}
@@ -22,6 +25,22 @@ export class ProductController {
   @Get('/')
   async getProducts(@Query() query: ProductsQueryDto): Promise<Product[]> {
     return await this.productService.getProducts(query);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Roles([Role.ADMIN])
+  @Get('/all')
+  async getAllProducts(
+    @Query() query: GetAllProductsQueryDto,
+  ): Promise<SuccessList<Product>> {
+    return await this.productService.getAllProducts(query);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Roles([Role.ADMIN])
+  @Get('/brands')
+  async getBrands(): Promise<Brand[]> {
+    return await this.productService.getBrands();
   }
 
   @UseGuards(AuthenticatedGuard)

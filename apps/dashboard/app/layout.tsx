@@ -7,7 +7,7 @@ import QueryProvider from '../lib/query-provider';
 import axios from 'axios';
 import { Toaster } from '@repo/ui/components/toaster';
 import NextAdapterApp from 'next-query-params/app';
-import { QueryParamProvider } from 'use-query-params';
+
 const inter = Inter({ subsets: ['latin'] });
 
 axios.defaults.withCredentials = true;
@@ -21,12 +21,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
         <QueryProvider>
-          <QueryParamProvider
-            adapter={NextAdapterApp}
-            options={{ enableBatching: true }}
-          >
-            <UserProvider> {children}</UserProvider>
-          </QueryParamProvider>{' '}
+          <UserProvider> {children}</UserProvider>
         </QueryProvider>
         <Toaster />
       </body>

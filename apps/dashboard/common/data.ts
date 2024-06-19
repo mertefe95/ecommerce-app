@@ -1,5 +1,10 @@
 import { NavItem } from '@dashboard/interfaces/common';
-import { DashboardIcon, PersonIcon, EnterIcon } from '@radix-ui/react-icons';
+import {
+  DashboardIcon,
+  PersonIcon,
+  EnterIcon,
+  LayersIcon,
+} from '@radix-ui/react-icons';
 
 export const navItems: any[] = [
   {
@@ -14,6 +19,12 @@ export const navItems: any[] = [
     href: '/users',
     icon: PersonIcon,
     label: 'user',
+  },
+  {
+    title: 'Products',
+    href: '/products',
+    icon: LayersIcon,
+    label: 'product',
   },
 
   {

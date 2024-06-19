@@ -8,9 +8,13 @@ export const API_URL =
 export enum RoutePath {
   USER = 'user',
   AUTH = 'auth',
+  PRODUCT = 'product',
 }
 
 export enum QueryKey {
   USERS = 'users',
   SEARCH = 'search',
+  PRODUCTS = 'products',
+  BRANDS = 'brands',
+  PRODUCT_TYPES = 'productTypes',
 }

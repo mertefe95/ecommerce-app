@@ -2,7 +2,6 @@
 
 import { MainContent } from './components/main-content';
 import { Suspense } from 'react';
-import { QueryParamProvider } from 'use-query-params';
 import NextAdapterApp from 'next-query-params/app';
 
 export default function DefaultLayout({

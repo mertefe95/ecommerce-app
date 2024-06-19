@@ -1,30 +1,12 @@
 'use client';
 
 import {
-  withDefault,
-  useQueryParam,
-  StringParam,
-  NumberParam,
-} from 'use-query-params';
-
-/*const JsonNew = {
-    encode: (json: any): any => {
-      console.log('json');
-      console.log(json);
-      return objectToSearchString(json);
-    },
-
-    decode: (json: any): any => {
-      return decodeJson(json);
-    },
-  };
-
-  const [sort, setSort] = useQueryParam('', withDefault(JsonNew, {}));*/
-
-/*const [pagination, setPagination] = useQueryParam(
-    'pagination',
-    withDefault(JsonParam, { pageNumber: 1, paginationPerPage: 10 })
-  );*/
+  useQueryState,
+  parseAsInteger,
+  parseAsString,
+  parseAsStringLiteral,
+  parseAsNumberLiteral,
+} from 'nuqs';
 
 export interface DataTableStateProps {
   search: string;
@@ -39,30 +21,41 @@ export interface DataTableStateProps {
   setPaginationPerPage: (newValue: number) => void;
 }
 
+export type Filter = 'productTypes' | 'brands';
+
 export function useDataTableState(): DataTableStateProps {
-  const [search, setSearch] = useQueryParam(
+  const filterOptions: { id: Filter }[] = [
+    {
+      id: 'productTypes',
+    },
+    {
+      id: 'brands',
+    },
+  ];
+
+  const [search, setSearch] = useQueryState(
     'search',
-    withDefault(StringParam, '')
+    parseAsString.withDefault('')
   );
 
-  const [orderByColumn, setOrderByColumn] = useQueryParam(
+  const [orderByColumn, setOrderByColumn] = useQueryState(
     'orderByColumn',
-    withDefault(StringParam, '')
+    parseAsString.withDefault('')
   );
 
-  const [orderDirection, setOrderDirection] = useQueryParam(
+  const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
-    withDefault(StringParam, '')
+    parseAsString.withDefault('')
   );
 
-  const [pageNumber, setPageNumber] = useQueryParam(
+  const [pageNumber, setPageNumber] = useQueryState(
     'pageNumber',
-    withDefault(NumberParam, 1)
+    parseAsInteger.withDefault(1)
   );
 
-  const [paginationPerPage, setPaginationPerPage] = useQueryParam(
+  const [paginationPerPage, setPaginationPerPage] = useQueryState(
     'paginationPerPage',
-    withDefault(NumberParam, 20)
+    parseAsInteger.withDefault(20)
   );
 
   return {
@@ -76,9 +69,5 @@ export function useDataTableState(): DataTableStateProps {
     setPageNumber,
     paginationPerPage,
     setPaginationPerPage,
-    /*sort,
-    setSort,
-    pagination,
-    setPagination,*/
   };
 }
