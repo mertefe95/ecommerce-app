@@ -4,8 +4,10 @@ import {
   useQueryState,
   parseAsInteger,
   parseAsString,
-  parseAsStringLiteral,
-  parseAsNumberLiteral,
+  useQueryStates,
+  UseQueryStatesKeysMap,
+  Values,
+  SetValues,
 } from 'nuqs';
 
 export interface DataTableStateProps {
@@ -19,20 +21,13 @@ export interface DataTableStateProps {
   setPageNumber: (newValue: number) => void;
   paginationPerPage: number;
   setPaginationPerPage: (newValue: number) => void;
+  filters?: Values<UseQueryStatesKeysMap<any>>;
+  setFilters?: SetValues<UseQueryStatesKeysMap<any>>;
 }
 
-export type Filter = 'productTypes' | 'brands';
-
-export function useDataTableState(): DataTableStateProps {
-  const filterOptions: { id: Filter }[] = [
-    {
-      id: 'productTypes',
-    },
-    {
-      id: 'brands',
-    },
-  ];
-
+export function useDataTableState(
+  filterState?: UseQueryStatesKeysMap
+): DataTableStateProps {
   const [search, setSearch] = useQueryState(
     'search',
     parseAsString.withDefault('')
@@ -58,6 +53,8 @@ export function useDataTableState(): DataTableStateProps {
     parseAsInteger.withDefault(20)
   );
 
+  const [filters, setFilters] = useQueryStates(filterState!);
+
   return {
     search,
     setSearch,
@@ -69,5 +66,7 @@ export function useDataTableState(): DataTableStateProps {
     setPageNumber,
     paginationPerPage,
     setPaginationPerPage,
+    filters,
+    setFilters,
   };
 }

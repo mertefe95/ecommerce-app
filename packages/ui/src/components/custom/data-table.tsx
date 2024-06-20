@@ -2,14 +2,7 @@
 
 import {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
   Table as ReactTable,
 } from '@tanstack/react-table';
 
@@ -23,48 +16,25 @@ import {
 } from '../table';
 import { Input } from '../input';
 import { DataTablePagination } from './data-table-pagination';
-import { UrlUpdateType } from 'use-query-params';
 import { DataTableType } from '../../types';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import clsx from 'clsx';
-import {
-  useQuery,
-  keepPreviousData,
-  UseQueryResult,
-  useInfiniteQuery,
-  UseInfiniteQueryResult,
-} from '@tanstack/react-query';
 import { DataTableFilter } from './data-table-filters';
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon,
-  Cross2Icon,
-} from '@radix-ui/react-icons';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { Button } from '../button';
-
-declare type NewValueType<D> = D | ((latestValue: D) => D);
+import { FilterOption } from '../../types';
 
 interface DataTableProps<TData, TValue> {
   table: ReactTable<TData>;
   columns: ColumnDef<TData, TValue>[];
   search: string;
-  setSearch: (
-    newValue: NewValueType<string | null | undefined>,
-    updateType?: UrlUpdateType
-  ) => void;
+  setSearch: (newValue: string) => void;
   type: DataTableType;
   fetchNextPage?: () => void;
   isFetching?: boolean;
   searchText?: string;
-  filterOptions?: any;
-  //queryResult: UseInfiniteQueryResult | UseQueryResult;
+  filterOptions?: FilterOption[];
 }
 
 export function DataTable<TData, TValue>({
@@ -93,52 +63,6 @@ export function DataTable<TData, TValue>({
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
-  const statuses = [
-    {
-      value: 'backlog',
-      label: 'Backlog',
-      icon: QuestionMarkCircledIcon,
-    },
-    {
-      value: 'todo',
-      label: 'Todo',
-      icon: CircleIcon,
-    },
-    {
-      value: 'in progress',
-      label: 'In Progress',
-      icon: StopwatchIcon,
-    },
-    {
-      value: 'done',
-      label: 'Done',
-      icon: CheckCircledIcon,
-    },
-    {
-      value: 'canceled',
-      label: 'Canceled',
-      icon: CrossCircledIcon,
-    },
-  ];
-
-  const priorities = [
-    {
-      label: 'Low',
-      value: 'low',
-      icon: ArrowDownIcon,
-    },
-    {
-      label: 'Medium',
-      value: 'medium',
-      icon: ArrowRightIcon,
-    },
-    {
-      label: 'High',
-      value: 'high',
-      icon: ArrowUpIcon,
-    },
-  ];
-
   return (
     <div className='grid gap-y-4'>
       <div className='flex items-center'>
@@ -150,20 +74,17 @@ export function DataTable<TData, TValue>({
         />
       </div>
       <div className='flex'>
-        {table.getColumn('status') && (
-          <DataTableFilter
-            column={table.getColumn('status')}
-            title='Status'
-            options={statuses}
-          />
-        )}
-        {table.getColumn('priority') && (
-          <DataTableFilter
-            column={table.getColumn('priority')}
-            title='Priority'
-            options={priorities}
-          />
-        )}
+        {filterOptions?.map((filter, index) => {
+          return (
+            <DataTableFilter
+              key={index}
+              column={table.getColumn(filter.id)}
+              title={filter.label}
+              options={filter.options}
+            />
+          );
+        })}
+
         {isFiltered && (
           <Button
             variant='ghost'

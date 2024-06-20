@@ -6,6 +6,7 @@ import { ProductsQueryDto } from './dto/get-products-query.dto';
 import Search from 'utils/custom/search';
 import OrderBy from 'utils/custom/order-by';
 import Pagination from 'utils/custom/pagination';
+import Filters from 'utils/custom/filter';
 import { SuccessList } from 'utils/dto';
 import { GetAllProductsQueryDto } from './dto/get-all-products-query.dto';
 
@@ -96,6 +97,21 @@ export class ProductService {
       { relations: ['productType'], field: 'name' },
       { relations: ['brand'], field: 'name' },
     ]);
+    console.log('query');
+    console.log(query);
+
+    const filters = Filters(search, [
+      {
+        when: query?.productType?.length > 0 ? true : false,
+        filter: {
+          productType: {
+            id: {
+              in: query?.productType,
+            },
+          },
+        },
+      },
+    ]);
 
     const { pagination } = Pagination(query);
 
@@ -107,7 +123,7 @@ export class ProductService {
 
     const products = await this.prisma.product.findMany({
       where: {
-        ...search,
+        ...filters,
       },
       include: {
         productType: true,
@@ -122,7 +138,7 @@ export class ProductService {
 
     const totalRows = await this.prisma.product.count({
       where: {
-        ...search,
+        ...filters,
       },
     });
 
@@ -133,10 +149,16 @@ export class ProductService {
   }
 
   async getBrands(): Promise<Brand[]> {
-    return this.prisma.brand.findMany();
+    const brands = await this.prisma.brand.findMany();
+    console.log('brands?');
+    console.log(brands);
+    return brands;
   }
 
   async getProductTypes(): Promise<ProductType[]> {
-    return this.prisma.productType.findMany();
+    const productTypes = await this.prisma.productType.findMany();
+    console.log('productTypes?');
+    console.log(productTypes);
+    return productTypes;
   }
 }

@@ -1,25 +1,44 @@
 'use client';
 import { DataTable } from '@repo/ui/components/custom/data-table';
 import { getColumns } from '../helpers/get-columns';
-import { useGetAllProducts } from '../hooks';
+import { useGetAllProducts, useGetBrands, useGetProductTypes } from '../hooks';
 import useDataTable from '@repo/ui/hooks/use-data-table';
-import { DataTableType } from 'packages/ui/src/types';
+import { DataTableType, FilterOption } from 'packages/ui/src/types';
+import { useMemo } from 'react';
 
 const Products = () => {
+  const columns = getColumns();
   const { data, state } = useGetAllProducts();
   const { data: products, totalRows } = data ?? {};
-  const columns = getColumns();
+  const { data: productTypes } = useGetProductTypes();
+
+  const filterOptions: FilterOption[] = useMemo(
+    () => [
+      {
+        id: 'productType',
+        label: 'Product types',
+        defaultValue: [],
+        options: productTypes ?? [],
+      },
+    ],
+    [productTypes]
+  );
 
   const dataTable = useDataTable({
     columns,
     data: products ?? [],
     totalRows: totalRows ?? 0,
     state,
+    filterOptions,
   });
 
   return (
     <div className='mt-20'>
-      <DataTable {...dataTable} type={DataTableType.PAGINATION} />
+      <DataTable
+        {...dataTable}
+        type={DataTableType.PAGINATION}
+        filterOptions={filterOptions}
+      />
     </div>
   );
 };

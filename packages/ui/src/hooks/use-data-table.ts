@@ -2,7 +2,6 @@
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
   useReactTable,
@@ -10,18 +9,21 @@ import {
   Table,
   RowSelectionState,
   Row,
+  getFacetedRowModel,
+  ColumnFilter,
 } from '@tanstack/react-table';
-import { UrlUpdateType } from 'use-query-params';
-import { useState } from 'react';
+import { UseQueryStatesKeysMap } from 'nuqs';
+import { DataTableStateProps } from './use-data-table-state';
+import { useState, useMemo } from 'react';
+import { FilterOption } from '../types';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   totalRows: number;
-  state: any;
+  state: DataTableStateProps;
+  filterOptions?: FilterOption[];
 }
-
-declare type NewValueType<D> = D | ((latestValue: D) => D);
 
 interface DataTableReturnProps<TData, TValue> {
   table: Table<TData>;
@@ -29,10 +31,7 @@ interface DataTableReturnProps<TData, TValue> {
   search: string;
   selectedRows: TData[];
   selectedRowIds: number[];
-  setSearch: (
-    newValue: NewValueType<string | null | undefined>,
-    updateType?: UrlUpdateType
-  ) => void;
+  setSearch: (newValue: string) => void;
 
   changeSelectedRows: (rows: Row<TData>[]) => void;
   resetSelectedRows: () => void;
@@ -43,6 +42,7 @@ export default function useDataTable<TData, TValue>({
   data,
   totalRows,
   state,
+  filterOptions,
 }: DataTableProps<TData, TValue>): DataTableReturnProps<TData, TValue> {
   const {
     search,
@@ -55,9 +55,10 @@ export default function useDataTable<TData, TValue>({
     orderByColumn,
     setOrderByColumn,
     setOrderDirection,
+    filters,
+    setFilters,
   } = state ?? {};
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const updateSorting = (newSorting: any) => {
@@ -72,6 +73,20 @@ export default function useDataTable<TData, TValue>({
     setOrderDirection(sortItem.orderDirection);
   };
 
+  const updateFilters = (newFilters: any) => {
+    const filters: { id: string; value: any }[] = newFilters();
+
+    let queryFilter: UseQueryStatesKeysMap = {};
+
+    filterOptions?.forEach((filterOption) => {
+      const filter = filters.find((f) => f.id === filterOption.id)!;
+      queryFilter[`${filterOption.id?.toString()}`] =
+        filter?.value ?? filterOption.defaultValue;
+    });
+
+    setFilters!(queryFilter);
+  };
+
   const sort: ColumnSort[] = [
     {
       id: orderByColumn,
@@ -79,11 +94,25 @@ export default function useDataTable<TData, TValue>({
     },
   ];
 
+  const filterState: ColumnFilter[] = useMemo(
+    () =>
+      Object.keys(filters ?? {}).map((key) => {
+        const value = filters![key];
+
+        return {
+          id: key,
+          value,
+        };
+      }),
+    [filters]
+  );
+
   const table = useReactTable({
     data,
     columns,
+    getFacetedRowModel: getFacetedRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: updateFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
     getRowId: (originalRow: any) => originalRow?.id,
@@ -94,7 +123,7 @@ export default function useDataTable<TData, TValue>({
     onSortingChange: updateSorting,
     state: {
       sorting: sort,
-      columnFilters,
+      columnFilters: filterState,
       rowSelection,
       pagination: {
         pageIndex: pageNumber ? pageNumber - 1 : 0,
@@ -112,8 +141,16 @@ export default function useDataTable<TData, TValue>({
   });
 
   const selected = table.getSelectedRowModel().rows;
-  const selectedRows = selected.map((row) => row.original);
-  const selectedRowIds = selected.map((row) => parseInt(row.id));
+
+  const selectedRows = useMemo(
+    () => selected.map((row) => row.original),
+    [selected]
+  );
+
+  const selectedRowIds = useMemo(
+    () => selected.map((row) => parseInt(row.id)),
+    [selected]
+  );
 
   const changeSelectedRows = (rows: Row<TData>[]) => {
     let newRowSelection: RowSelectionState = {};

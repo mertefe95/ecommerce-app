@@ -16,18 +16,21 @@ import {
 } from 'packages/ui/src/hooks/use-data-table-state';
 import { DataList, InfiniteScrollData } from '@repo/ui/types';
 import { Product, Brand, ProductType } from '@prisma/client';
-import { useMemo } from 'react';
+import { parseAsInteger, parseAsArrayOf } from 'nuqs';
 
-export function useGetAllProducts(): UseQueryResult<DataList<Product>> & {
-  state: DataTableStateProps;
-} {
-  const state = useDataTableState();
+export function useGetAllProducts() {
+  const defaultFilters = {
+    productType: parseAsArrayOf(parseAsInteger).withDefault([]),
+  };
+  const state = useDataTableState(defaultFilters);
+
   const {
     search,
     orderByColumn,
     orderDirection,
     pageNumber,
     paginationPerPage,
+    filters,
   } = state ?? {};
 
   const debouncedSearch = useDebounce(search, 500);
@@ -40,8 +43,16 @@ export function useGetAllProducts(): UseQueryResult<DataList<Product>> & {
       orderDirection,
       pageNumber,
       paginationPerPage,
+      filters,
     ],
-    queryFn: async (): Promise<DataList<Product>> => {
+    queryFn: async (): Promise<
+      DataList<
+        Product & {
+          productType: ProductType;
+          brand: Brand;
+        }
+      >
+    > => {
       const data = await axiosInstance.get(RoutePath.PRODUCT + '/all', {
         params: {
           search,
@@ -49,6 +60,7 @@ export function useGetAllProducts(): UseQueryResult<DataList<Product>> & {
           orderDirection,
           pageNumber,
           paginationPerPage,
+          ...filters,
         },
       });
 

@@ -21,6 +21,13 @@ export class ProductController {
   }
 
   @UseGuards(AuthenticatedGuard)
+  @Roles([Role.ADMIN])
+  @Get('/brands')
+  async getBrands(): Promise<Brand[]> {
+    return await this.productService.getBrands();
+  }
+
+  @UseGuards(AuthenticatedGuard)
   @Roles([Role.ADMIN, Role.USER, Role.GUEST])
   @Get('/')
   async getProducts(@Query() query: ProductsQueryDto): Promise<Product[]> {
@@ -34,13 +41,6 @@ export class ProductController {
     @Query() query: GetAllProductsQueryDto,
   ): Promise<SuccessList<Product>> {
     return await this.productService.getAllProducts(query);
-  }
-
-  @UseGuards(AuthenticatedGuard)
-  @Roles([Role.ADMIN])
-  @Get('/brands')
-  async getBrands(): Promise<Brand[]> {
-    return await this.productService.getBrands();
   }
 
   @UseGuards(AuthenticatedGuard)

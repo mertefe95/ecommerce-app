@@ -13,3 +13,10 @@ export enum DataTableType {
   PAGINATION = 'Pagination',
   NORMAL = 'Normal',
 }
+
+export interface FilterOption {
+  id: string;
+  label: string;
+  options: { id: number; name: string }[];
+  defaultValue?: any;
+}

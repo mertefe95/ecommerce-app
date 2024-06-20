@@ -52,12 +52,5 @@ export const getColumns = (): ColumnDef<User>[] => {
       },
       enableSorting: true,
     },
-    {
-      accessorKey: 'priority',
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title={'Last name'} />;
-      },
-      enableSorting: true,
-    },
   ];
 };
