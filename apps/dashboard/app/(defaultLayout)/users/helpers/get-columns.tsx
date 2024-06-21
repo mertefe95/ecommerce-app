@@ -30,6 +30,7 @@ export const getColumns = (): ColumnDef<User>[] => {
       ),
       enableSorting: false,
       enableHiding: false,
+      size: 50,
     },
     {
       accessorKey: 'firstName',

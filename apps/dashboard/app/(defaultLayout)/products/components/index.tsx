@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 
 const Products = () => {
   const columns = getColumns();
-  const { data, state } = useGetAllProducts();
+  const { data, state, isLoading, isFetching } = useGetAllProducts();
   const { data: products, totalRows } = data ?? {};
   const { data: productTypes } = useGetProductTypes();
 
@@ -30,6 +30,7 @@ const Products = () => {
     totalRows: totalRows ?? 0,
     state,
     filterOptions,
+    isLoading,
   });
 
   return (

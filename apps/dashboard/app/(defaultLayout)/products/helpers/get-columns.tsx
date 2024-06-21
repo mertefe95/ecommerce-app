@@ -34,6 +34,7 @@ export const getColumns = (): ColumnDef<
         />
       ),
       enableSorting: false,
+      size: 50,
     },
     {
       accessorKey: 'name',
@@ -49,6 +50,7 @@ export const getColumns = (): ColumnDef<
         return <DataTableColumnHeader column={column} title={'Type'} />;
       },
       enableSorting: true,
+      size: 350,
     },
     {
       accessorKey: 'brand',
@@ -57,6 +59,7 @@ export const getColumns = (): ColumnDef<
         return <DataTableColumnHeader column={column} title={'Brand'} />;
       },
       enableSorting: true,
+      size: 350,
     },
   ];
 };

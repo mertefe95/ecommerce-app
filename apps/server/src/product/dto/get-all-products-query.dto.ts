@@ -12,8 +12,6 @@ export class GetAllProductsQueryDto extends IntersectionType(
 ) {
   @IsNumber({}, { each: true })
   @Transform(({ value }) => {
-    console.log('value');
-    console.log(value);
     return value?.map((v) => parseInt(v));
   })
   @IsOptional()

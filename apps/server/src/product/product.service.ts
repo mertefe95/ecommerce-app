@@ -97,8 +97,6 @@ export class ProductService {
       { relations: ['productType'], field: 'name' },
       { relations: ['brand'], field: 'name' },
     ]);
-    console.log('query');
-    console.log(query);
 
     const filters = Filters(search, [
       {
@@ -150,15 +148,13 @@ export class ProductService {
 
   async getBrands(): Promise<Brand[]> {
     const brands = await this.prisma.brand.findMany();
-    console.log('brands?');
-    console.log(brands);
+
     return brands;
   }
 
   async getProductTypes(): Promise<ProductType[]> {
     const productTypes = await this.prisma.productType.findMany();
-    console.log('productTypes?');
-    console.log(productTypes);
+
     return productTypes;
   }
 }

@@ -1,20 +1,11 @@
 'use client';
 
-import {
-  useQuery,
-  keepPreviousData,
-  UseQueryResult,
-  useInfiniteQuery,
-  UseInfiniteQueryResult,
-} from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { axiosInstance } from '@web/common/api';
 import useDebounce from '@repo/ui/hooks/use-debounce';
 import { RoutePath, QueryKey } from '@dashboard/constants';
-import {
-  useDataTableState,
-  DataTableStateProps,
-} from 'packages/ui/src/hooks/use-data-table-state';
-import { DataList, InfiniteScrollData } from '@repo/ui/types';
+import { useDataTableState } from 'packages/ui/src/hooks/use-data-table-state';
+import { DataList } from '@repo/ui/types';
 import { Product, Brand, ProductType } from '@prisma/client';
 import { parseAsInteger, parseAsArrayOf } from 'nuqs';
 

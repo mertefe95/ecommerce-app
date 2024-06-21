@@ -6,7 +6,7 @@ import useDataTable from '@repo/ui/hooks/use-data-table';
 import { DataTableType } from 'packages/ui/src/types';
 
 const Users = () => {
-  const { data, state } = useGetAllUsers();
+  const { data, state, isLoading } = useGetAllUsers();
   const { data: users, totalRows } = data ?? {};
   const columns = getColumns();
 
@@ -15,6 +15,7 @@ const Users = () => {
     data: users ?? [],
     totalRows: totalRows ?? 0,
     state,
+    isLoading,
   });
 
   return (

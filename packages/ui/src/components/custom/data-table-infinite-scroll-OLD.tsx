@@ -71,7 +71,6 @@ export function DataTableInfiniteScroll<TData, TValue>({
           !isFetching &&
           totalFetched < totalDBRowCount
         ) {
-          console.log('fetch? next page???????');
           fetchNextPage();
         }
       }
@@ -92,7 +91,6 @@ export function DataTableInfiniteScroll<TData, TValue>({
 
   useEffect(() => {
     if (inView) {
-      console.log('fetch? next page???????');
       fetchNextPage();
     }
   }, [inView]);

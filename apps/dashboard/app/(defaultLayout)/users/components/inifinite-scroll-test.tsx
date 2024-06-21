@@ -16,6 +16,7 @@ const Users = () => {
     data: flatData ?? [],
     totalRows: 0,
     state,
+    isLoading,
   });
 
   return (

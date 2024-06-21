@@ -14,8 +14,9 @@ import {
 } from '@tanstack/react-table';
 import { UseQueryStatesKeysMap } from 'nuqs';
 import { DataTableStateProps } from './use-data-table-state';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, createElement } from 'react';
 import { FilterOption } from '../types';
+import { Skeleton } from '../components/skeleton';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -23,6 +24,7 @@ interface DataTableProps<TData, TValue> {
   totalRows: number;
   state: DataTableStateProps;
   filterOptions?: FilterOption[];
+  isLoading?: boolean;
 }
 
 interface DataTableReturnProps<TData, TValue> {
@@ -43,6 +45,7 @@ export default function useDataTable<TData, TValue>({
   totalRows,
   state,
   filterOptions,
+  isLoading,
 }: DataTableProps<TData, TValue>): DataTableReturnProps<TData, TValue> {
   const {
     search,
@@ -107,9 +110,27 @@ export default function useDataTable<TData, TValue>({
     [filters]
   );
 
+  const tableData = useMemo(
+    () => (isLoading ? Array(20).fill({}) : data),
+    [isLoading, data]
+  );
+
+  const columnsMemo = useMemo(
+    () =>
+      isLoading
+        ? columns.map((column) => ({
+            ...column,
+            cell: () => {
+              return createElement(Skeleton, { className: 'h-6' });
+            },
+          }))
+        : columns,
+    [isLoading, columns]
+  );
+
   const table = useReactTable({
-    data,
-    columns,
+    data: tableData,
+    columns: columnsMemo,
     getFacetedRowModel: getFacetedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: updateFilters,
@@ -137,6 +158,11 @@ export default function useDataTable<TData, TValue>({
       });
       setPageNumber(pagination.pageIndex + 1);
       setPaginationPerPage(pagination.pageSize);
+    },
+    defaultColumn: {
+      minSize: 0,
+      size: Number.MAX_SAFE_INTEGER,
+      maxSize: Number.MAX_SAFE_INTEGER,
     },
   });
 

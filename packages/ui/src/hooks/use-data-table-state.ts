@@ -53,7 +53,7 @@ export function useDataTableState(
     parseAsInteger.withDefault(20)
   );
 
-  const [filters, setFilters] = useQueryStates(filterState!);
+  const [filters, setFilters] = useQueryStates(filterState ?? {});
 
   return {
     search,
