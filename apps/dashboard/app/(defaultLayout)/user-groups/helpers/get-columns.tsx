@@ -1,11 +1,18 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, PointerIcon } from 'lucide-react';
 import { Button } from '@repo/ui/components/button';
 import { UserGroup, User } from '@prisma/client';
 import { Checkbox, IndeterminateCheckbox } from '@repo/ui/components/checkbox';
 import { DataTableColumnHeader } from '@repo/ui/components/custom/data-table-column-header';
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronRightIcon,
+  ListBulletIcon,
+  PinTopIcon,
+} from '@radix-ui/react-icons';
 
 export const getColumns = (): ColumnDef<UserGroup & { users: User[] }>[] => {
   return [
@@ -13,7 +20,7 @@ export const getColumns = (): ColumnDef<UserGroup & { users: User[] }>[] => {
       id: 'select',
       header: ({ table }) => {
         return (
-          <>
+          <div className='flex items-center justify-center gap-x-1'>
             <Checkbox
               checked={
                 table.getIsAllPageRowsSelected() ||
@@ -24,54 +31,57 @@ export const getColumns = (): ColumnDef<UserGroup & { users: User[] }>[] => {
               }
               aria-label='Select all'
             />
-            {/*<IndeterminateCheckbox
-            {...{
-              checked: table.getIsAllRowsSelected(),
-              indeterminate: table.getIsSomeRowsSelected(),
-              onChange: table.getToggleAllRowsSelectedHandler(),
-            }}
-          />*/}
-            <button
+
+            <Button
+              variant={'ghost'}
+              type='button'
               {...{
                 onClick: table.getToggleAllRowsExpandedHandler(),
               }}
+              className=''
+              size={'icon'}
             >
-              {table.getIsAllRowsExpanded() ? '👇' : '👉'}
-            </button>
-          </>
+              {table.getIsAllRowsExpanded() ? (
+                <ChevronDownIcon className='h-4 w-4' />
+              ) : (
+                <ChevronRightIcon className='h-4 w-4' />
+              )}
+            </Button>
+          </div>
         );
       },
       cell: ({ row }) => {
-        if (row.id == '1') {
-          const result = row.getIsAllSubRowsSelected();
-        }
         return (
-          <>
+          <div className='flex items-center justify-center gap-x-1'>
             <Checkbox
-              checked={row.getIsSelected() || row.getIsAllSubRowsSelected()}
+              checked={
+                row.getIsSelected() ||
+                (row.getCanExpand() && row.getIsAllSubRowsSelected())
+              }
               onCheckedChange={(value) => row.toggleSelected(!!value)}
               aria-label='Select row'
             />
-            {/*<IndeterminateCheckbox
-            {...{
-              checked: row.getIsSelected(),
-              indeterminate: row.getIsSomeSelected(),
-              onChange: row.getToggleSelectedHandler(),
-            }}
-          />{' '}*/}
+
             {row.getCanExpand() ? (
-              <button
+              <Button
+                variant={'ghost'}
+                type='button'
                 {...{
                   onClick: row.getToggleExpandedHandler(),
-                  style: { cursor: 'pointer' },
                 }}
+                className=''
+                size={'icon'}
               >
-                {row.getIsExpanded() ? '👇' : '👉'}
-              </button>
+                {row.getIsExpanded() ? (
+                  <ChevronDownIcon className='h-4 w-4' />
+                ) : (
+                  <ChevronRightIcon className='h-4 w-4' />
+                )}
+              </Button>
             ) : (
-              '🔵'
+              ''
             )}
-          </>
+          </div>
         );
       },
       enableSorting: false,

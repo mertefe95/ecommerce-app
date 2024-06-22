@@ -5,13 +5,12 @@ import {
   Table as ReactTable,
   ColumnDef,
 } from '@tanstack/react-table';
-import { Fragment } from 'react';
+import { Fragment, forwardRef } from 'react';
 import { TableBody, TableRow, TableCell } from '../table';
 import { DataTableType, SubTableType } from '../../types';
 import { SubTable } from './sub-table';
 
 interface DataTableBodyProps<TData, TValue> {
-  type: DataTableType;
   subType?: SubTableType;
   ref?: (node?: Element | null | undefined) => void;
   columnsLength: number;
@@ -20,8 +19,6 @@ interface DataTableBodyProps<TData, TValue> {
 }
 
 function DataTableBody<TData, TValue>({
-  type,
-  ref,
   subType,
   subColumns,
   columnsLength,
@@ -32,18 +29,10 @@ function DataTableBody<TData, TValue>({
   return (
     <TableBody>
       {rows?.length ? (
-        rows.map((row, rowIndex) => {
+        rows.map((row) => {
           return (
             <Fragment key={row.id}>
-              <TableRow
-                ref={
-                  type === DataTableType.INFINITE_SCROLL &&
-                  rowIndex === rows?.length - 4
-                    ? ref
-                    : null
-                }
-                data-state={row.getIsSelected() && 'selected'}
-              >
+              <TableRow data-state={row.getIsSelected() && 'selected'}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}

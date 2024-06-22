@@ -1,20 +1,24 @@
 'use client';
 
-import { ColumnDef, Table as ReactTable } from '@tanstack/react-table';
-import { Table } from '../table';
+import {
+  ColumnDef,
+  Table as ReactTable,
+  flexRender,
+} from '@tanstack/react-table';
+import { Table, TableBody, TableRow, TableCell } from '../table';
 import { useMemo } from 'react';
 import { Input } from '../input';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableType, SubTableType } from '../../types';
 import { useInView } from 'react-intersection-observer';
-import { useEffect } from 'react';
+import { useEffect, Fragment } from 'react';
 import clsx from 'clsx';
 import { DataTableFilter } from './data-table-filters';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Button } from '../button';
 import { FilterOption } from '../../types';
 import DataTableHeader from './data-table-header';
-import DataTableBody from './data-table-body';
+import { SubTable } from './sub-table';
 
 interface DataTableProps<TData, TValue> {
   table: ReactTable<TData>;
@@ -46,6 +50,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const { ref, inView } = useInView({
     threshold: 0,
+
     skip: type !== DataTableType.INFINITE_SCROLL,
   });
 
@@ -58,7 +63,7 @@ export function DataTable<TData, TValue>({
   const isFiltered = table.getState().columnFilters.length > 0;
 
   const headerGroups = useMemo(() => table.getHeaderGroups(), [table]);
-
+  const { rows } = table.getRowModel() ?? {};
   return (
     <div className='grid gap-y-4'>
       <div className='flex items-center'>
@@ -100,14 +105,59 @@ export function DataTable<TData, TValue>({
       >
         <Table>
           <DataTableHeader headerGroups={headerGroups} />
-          <DataTableBody
-            type={type}
-            ref={ref}
-            columnsLength={columns.length}
-            subColumns={subColumns}
-            subType={subType}
-            table={table}
-          />
+          <TableBody>
+            {rows?.length ? (
+              rows.map((row, rowIndex) => {
+                return (
+                  <Fragment key={row.id}>
+                    <TableRow
+                      ref={
+                        type === DataTableType.INFINITE_SCROLL &&
+                        rowIndex === rows?.length - 6
+                          ? ref
+                          : null
+                      }
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          style={{
+                            width:
+                              cell.column.getSize() === Number.MAX_SAFE_INTEGER
+                                ? 'auto'
+                                : cell.column.getSize(),
+                          }}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+
+                    {row.getIsExpanded() && (
+                      <SubTable
+                        row={row}
+                        subType={subType}
+                        subColumns={subColumns}
+                      />
+                    )}
+                  </Fragment>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns?.length}
+                  className='h-24 text-center'
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
         </Table>
       </div>{' '}
       {type === DataTableType.PAGINATION ? (
