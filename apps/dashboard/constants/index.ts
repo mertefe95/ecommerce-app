@@ -9,6 +9,7 @@ export enum RoutePath {
   USER = 'user',
   AUTH = 'auth',
   PRODUCT = 'product',
+  USER_GROUP = 'user-group',
 }
 
 export enum QueryKey {
@@ -17,4 +18,5 @@ export enum QueryKey {
   PRODUCTS = 'products',
   BRANDS = 'brands',
   PRODUCT_TYPES = 'productTypes',
+  USER_GROUPS = 'userGroups',
 }

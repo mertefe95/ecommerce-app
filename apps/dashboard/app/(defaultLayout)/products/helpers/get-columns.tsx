@@ -17,14 +17,26 @@ export const getColumns = (): ColumnDef<
     {
       id: 'select',
       header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label='Select all'
-        />
+        <>
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label='Select all'
+          />
+
+          <button
+            {...{
+              onClick: table.getToggleAllRowsExpandedHandler(),
+            }}
+          >
+            {table.getIsAllRowsExpanded() ? '👇' : '👉'}
+          </button>
+        </>
       ),
       cell: ({ row }) => (
         <Checkbox

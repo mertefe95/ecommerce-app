@@ -6,6 +6,7 @@ function createRandomUser() {
     lastName: faker.internet.userName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
+    groupId: faker.number.int({ min: 1, max: 20 }),
   };
 }
 

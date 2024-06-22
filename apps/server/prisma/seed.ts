@@ -10,6 +10,7 @@ const productType = require('./seeds/product-type.ts');
 const product = require('./seeds/product.ts');
 const shoppingCartProduct = require('./seeds/shopping-cart-product.ts');
 const user = require('./seeds/user.ts');
+const userGroup = require('./seeds/user-group.ts');
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,7 @@ const seed = async () => {
   await prisma.productType.deleteMany();
   await prisma.product.deleteMany();
   await prisma.shoppingCartProduct.deleteMany();
+  await prisma.userGroup.deleteMany();
   await prisma.user.deleteMany();
 
   await prisma.country.createMany({ data: country });
@@ -32,6 +34,7 @@ const seed = async () => {
   await prisma.productType.createMany({ data: productType });
   await prisma.product.createMany({ data: product });
   await prisma.admin.createMany({ data: admin });
+  await prisma.userGroup.createMany({ data: userGroup });
   await prisma.user.createMany({ data: user });
   await prisma.address.createMany({ data: address });
   //await prisma.order.createMany({ data: order });

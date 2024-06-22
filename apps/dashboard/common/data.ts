@@ -4,6 +4,7 @@ import {
   PersonIcon,
   EnterIcon,
   LayersIcon,
+  GroupIcon,
 } from '@radix-ui/react-icons';
 
 export const navItems: any[] = [
@@ -13,6 +14,12 @@ export const navItems: any[] = [
     href: '/dashboard',
     icon: DashboardIcon,
     label: 'Dashboard',
+  },
+  {
+    title: 'Groups',
+    href: '/user-groups',
+    icon: GroupIcon,
+    label: 'group',
   },
   {
     title: 'Users',

@@ -52,6 +52,15 @@ model ProductType {
   products Product[]
 }
 
+
+model UserGroup {
+  id                   Int                   @id @default(autoincrement())
+
+  name String @unique
+  users User[]
+}
+
+
 model User {
   id                   Int                   @id @default(autoincrement())
   email                String                @unique
@@ -61,6 +70,9 @@ model User {
   orders               Order[]
   shoppingCartProducts ShoppingCartProduct[]
   addresses            Address[]
+
+   groupId Int?
+   group   UserGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 model Admin {

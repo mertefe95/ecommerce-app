@@ -14,6 +14,11 @@ export enum DataTableType {
   NORMAL = 'Normal',
 }
 
+export enum SubTableType {
+  BASIC = 'Basic',
+  ADVANCED = 'Advanced',
+}
+
 export interface FilterOption {
   id: string;
   label: string;

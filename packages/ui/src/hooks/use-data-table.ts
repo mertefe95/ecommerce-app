@@ -11,6 +11,8 @@ import {
   Row,
   getFacetedRowModel,
   ColumnFilter,
+  getExpandedRowModel,
+  ExpandedState,
 } from '@tanstack/react-table';
 import { UseQueryStatesKeysMap } from 'nuqs';
 import { DataTableStateProps } from './use-data-table-state';
@@ -20,6 +22,7 @@ import { Skeleton } from '../components/skeleton';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
+  subColumns?: ColumnDef<any>[];
   data: TData[];
   totalRows: number;
   state: DataTableStateProps;
@@ -30,6 +33,7 @@ interface DataTableProps<TData, TValue> {
 interface DataTableReturnProps<TData, TValue> {
   table: Table<TData>;
   columns: ColumnDef<TData, TValue>[];
+  subColumns?: ColumnDef<any>[];
   search: string;
   selectedRows: TData[];
   selectedRowIds: number[];
@@ -41,6 +45,7 @@ interface DataTableReturnProps<TData, TValue> {
 
 export default function useDataTable<TData, TValue>({
   columns,
+  subColumns,
   data,
   totalRows,
   state,
@@ -63,6 +68,7 @@ export default function useDataTable<TData, TValue>({
   } = state ?? {};
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const updateSorting = (newSorting: any) => {
     const result = newSorting();
@@ -135,14 +141,23 @@ export default function useDataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: updateFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getSubRows: (row) => row.subRows,
     onRowSelectionChange: setRowSelection,
-    getRowId: (originalRow: any) => originalRow?.id,
+    getRowId: (originalRow) => {
+      //originalRow: any, index: number, parent?: any
+      return originalRow?.id;
+    },
+
     manualSorting: true,
     manualFiltering: true,
     manualPagination: true,
+    manualExpanding: true,
     rowCount: totalRows,
     onSortingChange: updateSorting,
+    onExpandedChange: setExpanded,
     state: {
+      expanded,
       sorting: sort,
       columnFilters: filterState,
       rowSelection,
@@ -164,6 +179,8 @@ export default function useDataTable<TData, TValue>({
       size: Number.MAX_SAFE_INTEGER,
       maxSize: Number.MAX_SAFE_INTEGER,
     },
+    //debugAll: true, // debug console logs only available in development
+    debugTable: true,
   });
 
   const selected = table.getSelectedRowModel().rows;
@@ -198,6 +215,7 @@ export default function useDataTable<TData, TValue>({
   return {
     table,
     columns,
+    subColumns,
     search,
     setSearch,
     selectedRows,
