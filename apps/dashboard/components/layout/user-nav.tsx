@@ -15,36 +15,52 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '@dashboard/context/user-context';
+import { useMutation } from '@tanstack/react-query';
+import { RoutePath } from '@dashboard/constants';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { axiosInstance } from '@web/common/api';
 
 export function UserNav() {
-  const user: any = null;
-  const session: any = {
-    user: {},
-  };
-  const signOut = () => {};
+  const { currentUser: user } = useContext(UserContext);
+  const router = useRouter();
+
+  const logout = useMutation({
+    mutationFn: () => {
+      return axiosInstance.post(RoutePath.AUTH + '/logout', {});
+    },
+
+    onSuccess: () => {
+      router.push('/');
+      toast.success(`You've been logged out`);
+    },
+    onError: () => {
+      toast.error(`An error occurred`);
+    },
+  });
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
-            <AvatarImage src={user?.image ?? ''} alt={user?.name ?? ''} />
-            <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback>
+            <AvatarImage src={user?.image ?? ''} alt={user?.userName ?? ''} />
+            <AvatarFallback>{user?.userName?.[0]}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>
-              {session.user?.name}
-            </p>
+            <p className='text-sm font-medium leading-none'>{user?.userName}</p>
             <p className='text-xs leading-none text-muted-foreground'>
-              {session.user?.email}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        {/* <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             Profile
@@ -60,10 +76,10 @@ export function UserNav() {
           </DropdownMenuItem>
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator /> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>
+        <DropdownMenuItem onClick={() => logout.mutate()}>
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

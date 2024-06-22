@@ -9,6 +9,7 @@ import { AddressModule } from './address/address.module';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart-module';
 import { UserModule } from './user/user.module';
 import { UserGroupModule } from './user-group/user-group.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserGroupModule } from './user-group/user-group.module';
     ShoppingCartModule,
     UserModule,
     UserGroupModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

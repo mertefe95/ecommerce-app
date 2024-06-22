@@ -9,8 +9,9 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { Input } from '@repo/ui/components/input';
-import { toast } from '@repo/ui/utility/use-toast';
+//import { toast } from '@repo/ui/utility/use-toast';
 import { axiosInstance } from '@web/common/api';
+import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { UserContext } from '@web/context/user-context';
@@ -45,7 +46,7 @@ type FormValues = z.infer<typeof formSchema>;
 export default function Login() {
   const router = useRouter();
 
-  const { currentUser, getCurrentUser } = useContext(UserContext);
+  const { getCurrentUser } = useContext(UserContext);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -63,11 +64,7 @@ export default function Login() {
 
     onSuccess: (response: { data: LoginResponse }) => {
       router.push('/');
-      toast({
-        title: 'You submitted the following values:',
-      });
-
-      const { user } = response?.data;
+      toast.success(`You've been logged in`);
       if (getCurrentUser) getCurrentUser();
     },
   });

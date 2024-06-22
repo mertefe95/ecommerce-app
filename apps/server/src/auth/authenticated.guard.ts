@@ -25,6 +25,9 @@ export class AuthenticatedGuard implements CanActivate {
     if (!request.isAuthenticated())
       throw new ForbiddenException('Authentication is denied.');
 
+    console.log('ne admin id?');
+    console.log(request?.user?.adminId);
+
     const adminId = request?.user?.adminId;
     const userId = request?.user?.userId;
 
@@ -32,7 +35,8 @@ export class AuthenticatedGuard implements CanActivate {
       const admin = await this.prisma.admin.findFirst({
         where: { id: adminId ?? 0 },
       });
-
+      console.log('admin');
+      console.log(admin);
       if (admin) return request.isAuthenticated();
     }
 

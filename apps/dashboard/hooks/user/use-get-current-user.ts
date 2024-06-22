@@ -8,7 +8,7 @@ export default function useGetCurrentUser() {
   const { isLoading, error, data, refetch } = useQuery<User>({
     queryKey: ['login'],
     queryFn: async () => {
-      const data = await axiosInstance.get('user/me');
+      const data = await axiosInstance.get('admin/me');
       return data.data;
     },
     refetchOnWindowFocus: false,

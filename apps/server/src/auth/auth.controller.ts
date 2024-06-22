@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { LocalAuthGuard } from 'src/auth/local.auth.guard';
 import { AdminAuthGuard } from 'src/auth/admin.auth.guard';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
@@ -8,6 +16,10 @@ import { RegisterDto } from './dto/register.dto';
 import { Role } from 'src/interface/role';
 import { Roles } from 'src/auth/roles.decorator';
 import { SuccessMessageDto, successMessage } from 'utils/success-message';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -44,6 +56,7 @@ export class AuthController {
   @Roles([Role.ADMIN])
   @Get('/is-admin')
   isAdmin(): SuccessMessageDto {
+    console.log('geldi mi?');
     return successMessage(`You are an admin.`);
   }
 
@@ -52,5 +65,25 @@ export class AuthController {
   @Get('/is-user')
   isCustomer(): SuccessMessageDto {
     return successMessage(`You are an user.`);
+  }
+
+  @Post('/logout')
+  logout(
+    @Req() req: ExpressRequest,
+    @Res()
+    res: ExpressResponse,
+  ): SuccessMessageDto {
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid', {
+        // Domain is set so that the cookie works for all subdomains
+        domain: ['production', 'staging']?.includes(process.env.NODE_ENV)
+          ? ''
+          : 'localhost',
+        path: '/',
+      });
+      res.redirect('/');
+    });
+
+    return successMessage(`Je bent succesvol uitgelogd`);
   }
 }

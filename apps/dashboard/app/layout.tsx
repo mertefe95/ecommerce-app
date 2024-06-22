@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google';
 import { UserProvider } from '../context/user-context';
 import QueryProvider from '../lib/query-provider';
 import axios from 'axios';
-import { Toaster } from '@repo/ui/components/toaster';
-import NextAdapterApp from 'next-query-params/app';
+//import { Toaster } from '@repo/ui/components/toaster';
+import { Toaster } from '@repo/ui/components/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +23,7 @@ export default function RootLayout({
         <QueryProvider>
           <UserProvider> {children}</UserProvider>
         </QueryProvider>
-        <Toaster />
+        <Toaster position='top-right' richColors /> {/*closeButton*/}
       </body>
     </html>
   );
