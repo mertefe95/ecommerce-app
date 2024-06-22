@@ -56,7 +56,6 @@ export class AuthController {
   @Roles([Role.ADMIN])
   @Get('/is-admin')
   isAdmin(): SuccessMessageDto {
-    console.log('geldi mi?');
     return successMessage(`You are an admin.`);
   }
 

@@ -15,10 +15,6 @@ export const getSubColumns = (): ColumnDef<User>[] => {
         return <></>;
       },
       cell: ({ row }) => {
-        if (row.id == '1') {
-          const result = row.getIsAllSubRowsSelected();
-        }
-        console.log(row);
         return (
           <>
             <Checkbox
