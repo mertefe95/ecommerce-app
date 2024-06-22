@@ -148,7 +148,6 @@ export default function useDataTable<TData, TValue>({
       //originalRow: any, index: number, parent?: any
       return originalRow?.id;
     },
-
     manualSorting: true,
     manualFiltering: true,
     manualPagination: true,
@@ -183,16 +182,33 @@ export default function useDataTable<TData, TValue>({
     debugTable: true,
   });
 
-  const selected = table.getSelectedRowModel().rows;
+  const { rows: selected, flatRows: selectedFlatRows } =
+    table.getSelectedRowModel();
 
   const selectedRows = useMemo(
     () => selected.map((row) => row.original),
     [selected]
   );
 
+  const selectedSubRows = useMemo(
+    () =>
+      selectedFlatRows
+        .filter((row) => row?.id?.toString()?.startsWith('subrow_'))
+        .map((row) => ({
+          ...row.original,
+          id: Number(row?.id?.toString()?.split('subrow_').pop()),
+        })),
+    [selectedFlatRows]
+  );
+
   const selectedRowIds = useMemo(
     () => selected.map((row) => parseInt(row.id)),
     [selected]
+  );
+
+  const selectedSubRowsId = useMemo(
+    () => selectedSubRows.map((row) => parseInt(row.id)),
+    [selectedSubRows]
   );
 
   const changeSelectedRows = (rows: Row<TData>[]) => {

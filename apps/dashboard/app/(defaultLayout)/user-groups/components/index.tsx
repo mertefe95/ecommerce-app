@@ -21,7 +21,7 @@ const UserGroups = () => {
         subRows: userGroup?.users?.map((user, index) => ({
           name: `${user.firstName}`,
           ...user,
-          id: `subrow_${user.id}_index`,
+          id: `subrow_${user.id}`,
         })),
       })) ?? [],
 
@@ -36,7 +36,7 @@ const UserGroups = () => {
       <DataTable
         {...dataTable}
         type={DataTableType.PAGINATION}
-        subType={SubTableType.BASIC}
+        subType={SubTableType.ADVANCED}
       />
     </div>
   );

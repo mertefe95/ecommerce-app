@@ -64,6 +64,7 @@ export function DataTable<TData, TValue>({
 
   const headerGroups = useMemo(() => table.getHeaderGroups(), [table]);
   const { rows } = table.getRowModel() ?? {};
+
   return (
     <div className='grid gap-y-4'>
       <div className='flex items-center'>
@@ -140,6 +141,7 @@ export function DataTable<TData, TValue>({
                     {row.getIsExpanded() && (
                       <SubTable
                         row={row}
+                        table={table}
                         subType={subType}
                         subColumns={subColumns}
                       />

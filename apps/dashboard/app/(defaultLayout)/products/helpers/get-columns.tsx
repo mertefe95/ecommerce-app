@@ -28,14 +28,6 @@ export const getColumns = (): ColumnDef<
             }
             aria-label='Select all'
           />
-
-          <button
-            {...{
-              onClick: table.getToggleAllRowsExpandedHandler(),
-            }}
-          >
-            {table.getIsAllRowsExpanded() ? '👇' : '👉'}
-          </button>
         </>
       ),
       cell: ({ row }) => (

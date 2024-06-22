@@ -16,32 +16,36 @@ export const getSubColumns = (): ColumnDef<User>[] => {
       },
       cell: ({ row }) => {
         return (
-          <>
+          <div className='flex items-center justify-center gap-x-1'>
             <Checkbox
-              checked={row.getIsSelected() || row.getIsAllSubRowsSelected()}
+              checked={
+                row.getIsSelected() ||
+                (row.getCanExpand() && row.getIsAllSubRowsSelected())
+              }
               onCheckedChange={(value) => row.toggleSelected(!!value)}
               aria-label='Select row'
             />
-            {/*<IndeterminateCheckbox
-            {...{
-              checked: row.getIsSelected(),
-              indeterminate: row.getIsSomeSelected(),
-              onChange: row.getToggleSelectedHandler(),
-            }}
-          />{' '}*/}
+
             {row.getCanExpand() ? (
-              <button
+              <Button
+                variant={'ghost'}
+                type='button'
                 {...{
                   onClick: row.getToggleExpandedHandler(),
-                  style: { cursor: 'pointer' },
                 }}
+                className=''
+                size={'icon'}
               >
-                {row.getIsExpanded() ? '👇' : '👉'}
-              </button>
+                {row.getIsExpanded() ? (
+                  <ChevronDownIcon className='h-4 w-4' />
+                ) : (
+                  <ChevronRightIcon className='h-4 w-4' />
+                )}
+              </Button>
             ) : (
-              '🔵'
+              ''
             )}
-          </>
+          </div>
         );
       },
       enableSorting: false,

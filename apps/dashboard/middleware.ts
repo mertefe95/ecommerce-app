@@ -26,9 +26,11 @@ export async function middleware(request: NextRequest) {
 
   const sessionID = request.cookies.get('connect.sid')?.value;
 
-  if (!sessionID && !auth.validatePath(path)) return NextResponse.next();
-  else if (!sessionID && auth.validatePath(path))
+  if (!sessionID && !auth.validatePath(path)) {
+    return NextResponse.next();
+  } else if (!sessionID && auth.validatePath(path)) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
+  }
 
   try {
     const res = await fetch(`${API_URL}${auth.getRolePath}`, {
@@ -36,17 +38,17 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders,
       credentials: 'include',
     });
-    /*const adminRole = await res.json().then((data) => data.adminRole);
-    const role = auth?.roles[adminRole as roles];*/
+
+    const role = auth.roles.ADMIN;
 
     if (res?.status !== 200 && !auth.validatePath(path))
       return NextResponse.next();
     else if (res?.status !== 200)
       return NextResponse.redirect(new URL('/login', request.nextUrl));
 
-    /*if (!role.validatePath(path) || !auth.validatePath(path)) {
+    if (!role.validatePath(path) || !auth.validatePath(path)) {
       return NextResponse.redirect(new URL(role.fallbackPath, request.nextUrl));
-    }*/
+    }
   } catch (e) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }

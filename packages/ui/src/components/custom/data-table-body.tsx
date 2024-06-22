@@ -47,9 +47,9 @@ function DataTableBody<TData, TValue>({
                   </TableCell>
                 ))}
               </TableRow>
-              {row.getIsExpanded() && (
+              {/*  {row.getIsExpanded() && (
                 <SubTable row={row} subType={subType} subColumns={subColumns} />
-              )}
+              )}*/}
             </Fragment>
           );
         })
