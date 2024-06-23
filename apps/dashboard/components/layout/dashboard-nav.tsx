@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { NavItem } from '@dashboard/interfaces/common';
 import { Dispatch, SetStateAction } from 'react';
-import { useSidebar } from '@dashboard/hooks/layout/use-sidebar';
+import { useSidebarContext as useSidebar } from '@dashboard/context/sidebar-context';
 import {
   Tooltip,
   TooltipContent,
@@ -30,6 +30,9 @@ export function DashboardNav({
   if (!items?.length) {
     return null;
   }
+
+  console.log(`isMinimized: ${isMinimized}`);
+  console.log(`isMobileNav: ${isMobileNav}`);
 
   return (
     <nav className='grid items-start gap-2'>

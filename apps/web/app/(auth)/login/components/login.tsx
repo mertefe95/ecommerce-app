@@ -13,7 +13,7 @@ import { toast } from '@repo/ui/utility/use-toast';
 import { axiosInstance } from '@web/common/api';
 import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
-import { UserContext } from '@web/context/user-context';
+import { useUserContext } from '@web/context/user-context';
 import { LoginRequest, LoginResponse } from '@web/interfaces/registration';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -44,7 +44,7 @@ type FormValues = z.infer<typeof formSchema>;
 export default function Login() {
   const router = useRouter();
 
-  const { currentUser, getCurrentUser } = useContext(UserContext);
+  const { currentUser, getCurrentUser } = useUserContext();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

@@ -6,10 +6,10 @@ import {
   LayersIcon,
   GroupIcon,
 } from '@radix-ui/react-icons';
+import { Building2Icon, CaptionsIcon } from 'lucide-react';
 
-export const navItems: any[] = [
+export const navItems: NavItem[] = [
   {
-    header: 'Main',
     title: 'Dashboard',
     href: '/dashboard',
     icon: DashboardIcon,
@@ -33,7 +33,18 @@ export const navItems: any[] = [
     icon: LayersIcon,
     label: 'product',
   },
-
+  {
+    title: 'Brands',
+    href: '/brands',
+    icon: CaptionsIcon,
+    label: 'brand',
+  },
+  {
+    title: 'Sellers',
+    href: '/sellers',
+    icon: Building2Icon,
+    label: 'seller',
+  },
   {
     title: 'Login',
     href: '/',

@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import { ChevronsLeft } from 'lucide-react';
 import { DashboardNav } from '@dashboard/components/layout/dashboard-nav';
 import { navItems } from '@dashboard/common/data';
-import { useSidebar } from '@dashboard/hooks/layout/use-sidebar';
+import { useSidebarContext as useSidebar } from '@dashboard/context/sidebar-context';
 
 type SidebarProps = {
   className?: string;

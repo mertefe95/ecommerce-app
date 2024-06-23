@@ -15,8 +15,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
-import { useContext, useEffect } from 'react';
-import { UserContext } from '@dashboard/context/user-context';
+import { useUserContext } from '@dashboard/context/user-context';
 import { useMutation } from '@tanstack/react-query';
 import { RoutePath } from '@dashboard/constants';
 import { useRouter } from 'next/navigation';
@@ -24,7 +23,7 @@ import { toast } from 'sonner';
 import { axiosInstance } from '@web/common/api';
 
 export function UserNav() {
-  const { currentUser: user } = useContext(UserContext);
+  const { currentUser: user } = useUserContext();
   const router = useRouter();
 
   const logout = useMutation({
