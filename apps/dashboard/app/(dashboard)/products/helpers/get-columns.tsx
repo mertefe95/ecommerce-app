@@ -6,7 +6,7 @@ import { Button } from '@repo/ui/components/button';
 import { Product, ProductType, Brand } from '@prisma/client';
 import { Checkbox } from '@repo/ui/components/checkbox';
 import { DataTableColumnHeader } from '@repo/ui/components/custom/data-table-column-header';
-//test //test
+//test //test // test
 export const getColumns = (): ColumnDef<
   Product & {
     productType: ProductType;
