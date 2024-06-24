@@ -16,7 +16,7 @@ export const navItems: NavItem[] = [
     label: 'Dashboard',
   },
   {
-    title: 'Groups',
+    title: 'Groups (expand example)',
     href: '/user-groups',
     icon: GroupIcon,
     label: 'group',
@@ -33,7 +33,7 @@ export const navItems: NavItem[] = [
     icon: LayersIcon,
     label: 'product',
   },
-  {
+  /*{
     title: 'Brands',
     href: '/brands',
     icon: CaptionsIcon,
@@ -44,9 +44,9 @@ export const navItems: NavItem[] = [
     href: '/sellers',
     icon: Building2Icon,
     label: 'seller',
-  },
+  },*/
   {
-    title: 'Login',
+    title: 'Infinite scroll users',
     href: '/',
     icon: EnterIcon,
     label: 'login',

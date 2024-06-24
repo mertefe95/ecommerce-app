@@ -1,7 +1,12 @@
 'use client';
 import { DataTable } from '@repo/ui/components/custom/data-table';
 import { getColumns } from '../helpers/get-columns';
-import { useGetAllProducts, useGetBrands, useGetProductTypes } from '../hooks';
+import {
+  useGetAllProducts,
+  useGetBrands,
+  useGetProductTypes,
+  useGetSellers,
+} from '../hooks';
 import useDataTable from '@repo/ui/hooks/use-data-table';
 import { DataTableType, FilterOption } from 'packages/ui/src/types';
 import { useMemo } from 'react';
@@ -11,6 +16,8 @@ const Products = () => {
   const { data, state, isLoading, isFetching } = useGetAllProducts();
   const { data: products, totalRows } = data ?? {};
   const { data: productTypes } = useGetProductTypes();
+  const { data: brands } = useGetBrands();
+  const { data: sellers } = useGetSellers();
 
   const filterOptions: FilterOption[] = useMemo(
     () => [
@@ -20,8 +27,20 @@ const Products = () => {
         defaultValue: [],
         options: productTypes ?? [],
       },
+      {
+        id: 'brand',
+        label: 'Brands',
+        defaultValue: [],
+        options: brands ?? [],
+      },
+      {
+        id: 'seller',
+        label: 'Sellers',
+        defaultValue: [],
+        options: sellers ?? [],
+      },
     ],
-    [productTypes]
+    [productTypes, brands, sellers]
   );
 
   const dataTable = useDataTable({

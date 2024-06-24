@@ -137,10 +137,10 @@ export default function useDataTable<TData, TValue>({
   const table = useReactTable({
     data: tableData,
     columns: columnsMemo,
-    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(), // -> disabled because of serverside filtering
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: updateFilters,
-    getFilteredRowModel: getFilteredRowModel(),
+    //getFilteredRowModel: getFilteredRowModel(), // -> disabled because of serverside filtering
     getExpandedRowModel: getExpandedRowModel(),
     getSubRows: (row) => row.subRows,
     onRowSelectionChange: setRowSelection,

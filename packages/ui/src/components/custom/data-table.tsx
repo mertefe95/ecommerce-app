@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
           className='max-w-sm'
         />
       </div>
-      <div className='flex'>
+      <div className='flex gap-x-2'>
         {filterOptions?.map((filter, index) => {
           return (
             <DataTableFilter

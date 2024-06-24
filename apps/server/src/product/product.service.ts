@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Brand, Product, ProductType } from '@prisma/client';
+import { Brand, Product, ProductType, Seller } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 import { ProductsQueryDto } from './dto/get-products-query.dto';
 import Search from 'utils/custom/search';
@@ -92,6 +92,8 @@ export class ProductService {
   async getAllProducts(
     query: GetAllProductsQueryDto,
   ): Promise<SuccessList<Product>> {
+    const { productType, brand, sellers } = query ?? {};
+
     const search = Search(query, [
       { field: 'name' },
       { relations: ['productType'], field: 'name' },
@@ -100,11 +102,33 @@ export class ProductService {
 
     const filters = Filters(search, [
       {
-        when: query?.productType?.length > 0 ? true : false,
+        when: productType?.length > 0 ? true : false,
         filter: {
           productType: {
             id: {
-              in: query?.productType,
+              in: productType,
+            },
+          },
+        },
+      },
+      {
+        when: brand?.length > 0 ? true : false,
+        filter: {
+          brand: {
+            id: {
+              in: brand,
+            },
+          },
+        },
+      },
+      {
+        when: sellers?.length > 0 ? true : false,
+        filter: {
+          productSellers: {
+            some: {
+              sellerId: {
+                in: sellers,
+              },
             },
           },
         },
@@ -156,5 +180,12 @@ export class ProductService {
     const productTypes = await this.prisma.productType.findMany();
 
     return productTypes;
+  }
+
+  async getSellers(): Promise<Seller[]> {
+    const sellers = await this.prisma.seller.findMany();
+    console.log('seller');
+    console.log(sellers);
+    return sellers;
   }
 }

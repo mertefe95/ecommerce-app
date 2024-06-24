@@ -12,6 +12,7 @@ import { parseAsInteger, parseAsArrayOf } from 'nuqs';
 export function useGetAllProducts() {
   const defaultFilters = {
     productType: parseAsArrayOf(parseAsInteger).withDefault([]),
+    brand: parseAsArrayOf(parseAsInteger).withDefault([]),
   };
   const state = useDataTableState(defaultFilters);
 
@@ -85,6 +86,17 @@ export function useGetProductTypes() {
     queryKey: [QueryKey.PRODUCT_TYPES],
     queryFn: async (): Promise<ProductType[]> => {
       const data = await axiosInstance.get(RoutePath.PRODUCT + '/types');
+
+      return data?.data ?? [];
+    },
+  });
+}
+
+export function useGetSellers() {
+  return useQuery({
+    queryKey: [QueryKey.SELLERS],
+    queryFn: async (): Promise<ProductType[]> => {
+      const data = await axiosInstance.get(RoutePath.PRODUCT + '/sellers');
 
       return data?.data ?? [];
     },

@@ -17,6 +17,7 @@ export enum QueryKey {
   SEARCH = 'search',
   PRODUCTS = 'products',
   BRANDS = 'brands',
+  SELLERS = 'sellers',
   PRODUCT_TYPES = 'productTypes',
   USER_GROUPS = 'userGroups',
 }

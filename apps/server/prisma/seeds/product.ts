@@ -7,6 +7,7 @@ module.exports = [
     stock: 800,
     productTypeId: 1,
     maxQuantity: 5,
+    brandId: 1,
   },
   {
     name: 'Composition notebook',
@@ -16,6 +17,7 @@ module.exports = [
     stock: 600,
     productTypeId: 1,
     maxQuantity: 10,
+    brandId: 2,
   },
   {
     name: 'Hardcover journal',
@@ -25,6 +27,7 @@ module.exports = [
     stock: 900,
     productTypeId: 1,
     maxQuantity: 5,
+    brandId: 3,
   },
   {
     name: 'Refillable leather notebook',
@@ -34,6 +37,7 @@ module.exports = [
     stock: 1000,
     productTypeId: 1,
     maxQuantity: 4,
+    brandId: 4,
   },
   {
     name: 'Grid paper notebook',

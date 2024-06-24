@@ -17,4 +17,20 @@ export class GetAllProductsQueryDto extends IntersectionType(
   @IsOptional()
   @ApiProperty()
   productType?: number[];
+
+  @IsNumber({}, { each: true })
+  @Transform(({ value }) => {
+    return value?.map((v) => parseInt(v));
+  })
+  @IsOptional()
+  @ApiProperty()
+  brand?: number[];
+
+  @IsNumber({}, { each: true })
+  @Transform(({ value }) => {
+    return value?.map((v) => parseInt(v));
+  })
+  @IsOptional()
+  @ApiProperty()
+  sellers?: number[];
 }

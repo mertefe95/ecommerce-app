@@ -32,6 +32,8 @@ export function DataTableFilter<TData, TValue>({
   options,
 }: DataTableFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
+  const rows = column?.getFacetedRowModel();
+
   const selectedValues = new Set(column?.getFilterValue() as number[]);
 
   return (
@@ -112,11 +114,11 @@ export function DataTableFilter<TData, TValue>({
                       <option.icon className='mr-2 h-4 w-4 text-muted-foreground' />
                     )}
                     <span>{option.name}</span>
-                    {facets?.get(option.id) && (
+                    {/*{facets?.get(option.id) && (
                       <span className='ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs'>
                         {facets.get(option.id)}
                       </span>
-                    )}
+                    )} */}
                   </CommandItem>
                 );
               })}
