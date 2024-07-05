@@ -14,7 +14,6 @@ export class AdminController {
   @Roles([Role.ADMIN])
   @Get('/me')
   async getMyInfo(@Request() req: ExpressRequest): Promise<Admin> {
-    console.log('dogru mu');
     return await this.adminService.getAdminById(req.user?.adminId);
   }
 }

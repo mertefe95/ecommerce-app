@@ -6,8 +6,31 @@ import { Button } from '@repo/ui/components/button';
 import { User } from '@prisma/client';
 import { Checkbox } from '@repo/ui/components/checkbox';
 import { DataTableColumnHeader } from '@repo/ui/components/custom/data-table-column-header';
+import { DataTableRowActions } from '@repo/ui/components/custom/data-table-row-actions';
+import { PersonIcon, TrashIcon } from '@radix-ui/react-icons';
 
 export const getColumns = (): ColumnDef<User>[] => {
+  const actions = [
+    {
+      name: 'Detail',
+      icon: <PersonIcon className='mr-2 h-5 w-5' />,
+      href: '/users',
+      onClick: () => {},
+    },
+    {
+      name: 'Delete',
+      icon: <TrashIcon className='mr-2 h-5 w-5' />,
+    },
+    {
+      name: 'Favorite',
+    },
+    {
+      name: 'Labels',
+    },
+    {
+      name: 'Delete',
+    },
+  ];
   return [
     {
       id: 'select',
@@ -52,6 +75,10 @@ export const getColumns = (): ColumnDef<User>[] => {
         return <DataTableColumnHeader column={column} title={'Email'} />;
       },
       enableSorting: true,
+    },
+    {
+      id: 'actions',
+      cell: ({ row }) => <DataTableRowActions row={row} actions={actions} />,
     },
   ];
 };
