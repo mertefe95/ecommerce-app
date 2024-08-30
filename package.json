@@ -16,6 +16,9 @@
     "prettier-plugin-tailwindcss": "^0.6.6",
     "turbo": "^1.13.2"
   },
+  "dependencies": {
+    "turbo": "^1.13.2"
+  },
   "engines": {
     "node": ">=18"
   },
