@@ -13,8 +13,7 @@
   "devDependencies": {
     "eslint": "^9.9.1",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.6",
-    "turbo": "^1.13.2"
+    "prettier-plugin-tailwindcss": "^0.6.6"
   },
   "dependencies": {
     "turbo": "^1.13.2"
