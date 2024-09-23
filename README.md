@@ -17,3 +17,10 @@ npx prisma migrate dev --name init
 ```sh
 npx prisma migrate reset --force init
 ```
+
+## Install a package
+
+```sh
+yarn workspace web add jest --dev
+yarn workspace @repo/ui add jest --dev
+```
